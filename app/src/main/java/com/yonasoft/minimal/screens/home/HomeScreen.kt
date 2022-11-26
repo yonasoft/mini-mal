@@ -2,12 +2,16 @@ package com.yonasoft.minimal.screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.yonasoft.minimal.components.DrawerHeader
 import com.yonasoft.minimal.components.HomeAppBar
@@ -17,7 +21,9 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController,
+                homeViewModel: HomeViewModel = hiltViewModel()
+               ) {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     Scaffold(
@@ -43,6 +49,12 @@ fun HomeScreen(navController: NavController) {
         }
     ) {
         Surface(modifier = Modifier.padding(it)) {
+            LazyRow {
+                items(homeViewModel.airingRanking){ item->
+                    Text(item.title)
+
+                }
+            }
         }
     }
 }

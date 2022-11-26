@@ -50,7 +50,7 @@ fun LoggedOutDrawerBody(
                 }
             } else {
                 //TODO:
-                Row() {
+                Row(modifier = Modifier.padding(top = 12.dp)) {
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(
                         text = item.title,

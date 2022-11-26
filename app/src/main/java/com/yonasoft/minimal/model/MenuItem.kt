@@ -41,16 +41,11 @@ object MenuItems {
         ),
         MenuDestination(
             route = "",
-            title = "News",
+            title = "News + Articles",
             icon = Icons.Default.Newspaper,
-            contentDescription = "Navigate to News",
+            contentDescription = "Navigate to News and Articles",
         ),
-        MenuDestination(
-            route = "",
-            title = "Articles",
-            icon = Icons.Default.Article,
-            contentDescription = "Navigate to Articles",
-        ),
+
         MenuDestination(
             route = "",
             title = "Top",
