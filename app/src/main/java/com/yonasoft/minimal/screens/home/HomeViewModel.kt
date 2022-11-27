@@ -18,16 +18,20 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
     var airingRanking: List<AnimeDetail> by mutableStateOf(listOf())
+    var airRankingLoading: Boolean by mutableStateOf(false)
+
     var seasonal: List<AnimeDetail> by mutableStateOf(listOf())
+    var seasonalLoading: Boolean by mutableStateOf(false)
 
     init {
         viewModelScope.launch {
             initializeAiringRanking()
-//            getSeasonal()
+            initializeSeasonal()
         }
     }
 
     private suspend fun initializeAiringRanking() {
+        airRankingLoading = true
         val airingListResponse =
             try {
                 repository.getAnimeRanking(
@@ -49,11 +53,13 @@ class HomeViewModel @Inject constructor(private val repository: Repository) : Vi
                 getAnimeDetail(item.node.id)?.let { result.add(it) }
             }
             airingRanking = result
+            airRankingLoading = false
         }
 
     }
 
     private suspend fun initializeSeasonal() {
+        seasonalLoading = true
         val season = when (Calendar.getInstance().get(Calendar.MONTH)) {
             0 -> "winter"
             1 -> "winter"
@@ -75,8 +81,8 @@ class HomeViewModel @Inject constructor(private val repository: Repository) : Vi
                 repository.getAnimeSeasonal(
                     sort = "anime_score",
                     year = Calendar.getInstance().get(Calendar.YEAR),
-                    season = "fall",
-                    limit = 30,
+                    season = season,
+                    limit = 20,
                     offset = 0,
                     fields = ""
                 )
@@ -89,14 +95,19 @@ class HomeViewModel @Inject constructor(private val repository: Repository) : Vi
             }
 
         if (response.isSuccessful && response.body() != null) {
-
+            val result = mutableListOf<AnimeDetail>()
+            for(item in response.body()!!.data){
+                getAnimeDetail(item.node.id)?.let { result.add(it) }
+            }
+            seasonal = result
+            seasonalLoading = false
         }
     }
 
     private suspend fun getAnimeDetail(animeId:Int): AnimeDetail? {
         val response =
             try {
-                repository.getAnimeDetails(animeId = animeId, fields = "")
+                repository.getAnimeDetails(animeId = animeId)
             } catch (e: IOException) {
                 Log.e("HVM", "IOException")
                 return null

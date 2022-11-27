@@ -7,7 +7,7 @@ data class AnimeDetail(
     val broadcast: Broadcast,
     val created_at: String,
     val end_date: String,
-    val genres: List<Genre>,
+    val genres: List<Genre>?,
     val id: Int,
     val main_picture: MainPicture,
     val mean: Double,

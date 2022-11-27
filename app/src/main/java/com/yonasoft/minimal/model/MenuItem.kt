@@ -39,12 +39,6 @@ object MenuItems {
             title = "Discover",
             contentDescription = "Discover Section"
         ),
-        MenuDestination(
-            route = "",
-            title = "News + Articles",
-            icon = Icons.Default.Newspaper,
-            contentDescription = "Navigate to News and Articles",
-        ),
 
         MenuDestination(
             route = "",
