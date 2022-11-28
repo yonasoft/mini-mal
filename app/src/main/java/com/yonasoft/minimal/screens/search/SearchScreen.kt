@@ -18,7 +18,7 @@ fun SearchScreen(
     Scaffold(topBar = {
         SearchAppBar(text = searchViewModel.searchQuery,
             navController = navController,
-            onSearch = { },
+            onSearch = {},
             onTextChange = { searchViewModel.searchQuery = it })
     }
     ) {
