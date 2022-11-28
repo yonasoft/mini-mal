@@ -1,7 +1,7 @@
 package com.yonasoft.minimal.screens.home
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -17,16 +17,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.yonasoft.minimal.components.AnimeItemRow
-import com.yonasoft.minimal.components.DrawerHeader
-import com.yonasoft.minimal.components.HomeAppBar
-import com.yonasoft.minimal.components.LoggedOutDrawerBody
+import com.yonasoft.minimal.components.*
 import com.yonasoft.minimal.model.MenuItems
+import com.yonasoft.minimal.navigation.Screen
 import com.yonasoft.minimal.ui.theme.Blue1
 import com.yonasoft.minimal.ui.theme.Blue2
 import kotlinx.coroutines.launch
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -37,14 +34,25 @@ fun HomeScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
+            //Passing an empty string as an arg when navigating leads to an error.
+            //Multiple alternatives and work-arounds were attempted but what you see below is best option out of them.
+            //A string with just a space is passed and then SearchViewModel will initial based on if the arg is " " or something else(User input)
+            val navigationLocation =  Screen.SearchScreen.withArgs(homeViewModel.searchQuery.ifEmpty { " " })
             HomeAppBar(
-                text = "lol",
-                onSearch = {},
+
+                text = homeViewModel.searchQuery,
+                onSearch = {
+                    navController.navigate(
+                        navigationLocation
+                    )
+                    homeViewModel.searchQuery = ""
+                },
                 navigationIconClick = {
                     scope.launch {
                         scaffoldState.drawerState.open()
                     }
-                }
+                },
+                onTextChange = { homeViewModel.searchQuery = it }
             )
         },
         drawerContent = {
@@ -65,26 +73,31 @@ fun HomeScreen(
                     .verticalScroll(rememberScrollState()),
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     Text(
                         text = "Popular Airing",
                         color = Color.White
                     )
-                    Card(modifier = Modifier.width(60.dp),  backgroundColor = Blue1, shape = CircleShape, elevation = 12.dp){Text(text = "more", textAlign = TextAlign.Center)}
+                    Card(
+                        modifier = Modifier
+                            .width(60.dp)
+                            .clickable { },
+                        backgroundColor = Blue1,
+                        shape = CircleShape,
+                        elevation = 12.dp
+                    ) { Text(text = "more", textAlign = TextAlign.Center) }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 if (homeViewModel.airRankingLoading) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(152.dp),
-                            color = Blue1,
-                            strokeWidth = 12.dp,
-                        )
-                    }
-
+                    CircularProgress(
+                        rowModifier = Modifier.fillMaxWidth(),
+                        indicatorModifier = Modifier.size(152.dp),
+                        color = Blue1,
+                        strokeWidth = 12.dp
+                    )
                 } else {
                     LazyRow {
                         items(homeViewModel.airingRanking) { item ->
@@ -95,20 +108,31 @@ fun HomeScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(12.dp))
-                Text(text = "Seasonal",
-                    color = Color.White)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Seasonal",
+                        color = Color.White
+                    )
+                    Card(
+                        modifier = Modifier
+                            .width(60.dp)
+                            .clickable { },
+                        backgroundColor = Blue1,
+                        shape = CircleShape,
+                        elevation = 12.dp
+                    ) { Text(text = "more", textAlign = TextAlign.Center) }
+                }
                 Spacer(modifier = Modifier.height(8.dp))
                 if (homeViewModel.seasonalLoading) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(152.dp),
-                            color = Blue1,
-                            strokeWidth = 12.dp,
-                        )
-                    }
+                    CircularProgress(
+                        rowModifier = Modifier.fillMaxWidth(),
+                        indicatorModifier = Modifier.size(152.dp),
+                        color = Blue1,
+                        strokeWidth = 12.dp
+                    )
                 } else {
                     LazyRow {
                         items(homeViewModel.seasonal) { item ->
@@ -121,8 +145,9 @@ fun HomeScreen(
                         }
                     }
                 }
-                //TODO: Add currently watching row and suggested row if they logged in
+                //TODO: Add currently watching row and recommended/suggested row if they logged in
             }
         }
     }
 }
+

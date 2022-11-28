@@ -8,21 +8,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.yonasoft.minimal.ui.theme.Blue1
 
 
 @Composable
 fun HomeAppBar(
     text: String,
-    onSearch: (String) -> Unit,
+    onSearch: () -> Unit,
+    onTextChange: (String) -> Unit,
     navigationIconClick: () -> Unit,
 ) {
     Surface(
@@ -42,7 +43,36 @@ fun HomeAppBar(
                     contentDescription = "Toggle Drawer"
                 )
             }
-            SearchTextField(onSearch = {onSearch(text)})
+            SearchTextField(text = text, onSearch = { onSearch() }, onTextChange = {onTextChange(it)})
+        }
+    }
+}
+
+@Composable
+fun SearchAppBar(
+    navController: NavController,
+    text: String="",
+    onSearch: () -> Unit,
+    onTextChange: (String) -> Unit,
+) {
+    Surface(
+        modifier = Modifier
+            .height(64.dp)
+            .fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Blue1),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Go Back"
+                )
+            }
+            SearchTextField(text = text, onSearch = { onSearch() }, onTextChange = {onTextChange(it)})
         }
     }
 }

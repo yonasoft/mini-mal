@@ -17,6 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+    var searchQuery by mutableStateOf("")
+
     var airingRanking: List<AnimeDetail> by mutableStateOf(listOf())
     var airRankingLoading: Boolean by mutableStateOf(false)
 
