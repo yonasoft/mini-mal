@@ -16,7 +16,6 @@ class SearchViewModel @Inject constructor(state: SavedStateHandle) : ViewModel()
         //Passing an empty string as an arg when navigating leads to an error.
         //Multiple alternatives and work-arounds were attempted but what you see below is best option out of them.
         //A string with just a space is passed and then SearchViewModel will initial based on if the arg is " " or something else(User input)
-
          if (state.get<String>("initial_search")!=" ") {
              searchQuery = state.get<String>("initial_search").toString()
          }
