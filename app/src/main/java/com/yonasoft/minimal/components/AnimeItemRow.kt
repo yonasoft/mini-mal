@@ -28,7 +28,6 @@ import java.util.*
 @Composable
 fun AnimeItemRow(
     animeDetail: AnimeDetail,
-    navController: NavController,
     onClick: (AnimeDetail) -> Unit
 ) {
     Card(

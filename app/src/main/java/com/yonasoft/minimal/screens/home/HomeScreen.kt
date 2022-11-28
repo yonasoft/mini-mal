@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -93,15 +94,16 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 if (homeViewModel.airRankingLoading) {
                     CircularProgress(
-                        rowModifier = Modifier.fillMaxWidth(),
-                        indicatorModifier = Modifier.size(152.dp),
+                        boxModifier = Modifier.fillMaxWidth().height(152.dp),
+                        alignment = Alignment.Center,
+                        indicatorModifier = Modifier.size(128.dp),
                         color = Blue1,
                         strokeWidth = 12.dp
                     )
                 } else {
                     LazyRow {
                         items(homeViewModel.airingRanking) { item ->
-                            AnimeItemRow(animeDetail = item, navController = navController) {
+                            AnimeItemRow(animeDetail = item) {
 
                             }
                         }
@@ -128,8 +130,9 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 if (homeViewModel.seasonalLoading) {
                     CircularProgress(
-                        rowModifier = Modifier.fillMaxWidth(),
-                        indicatorModifier = Modifier.size(152.dp),
+                        boxModifier = Modifier.fillMaxWidth().height(152.dp),
+                        alignment = Alignment.Center,
+                        indicatorModifier = Modifier.size(128.dp),
                         color = Blue1,
                         strokeWidth = 12.dp
                     )
@@ -138,7 +141,6 @@ fun HomeScreen(
                         items(homeViewModel.seasonal) { item ->
                             AnimeItemRow(
                                 animeDetail = item,
-                                navController = navController
                             ) {
 
                             }

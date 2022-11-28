@@ -10,6 +10,21 @@ import javax.inject.Singleton
 @Singleton
 class Repository(
 ) {
+    suspend fun getAnimeList(
+        query: String,
+        limit: Int,
+        offset: Int,
+        fields: String
+    ): Response<Anime> {
+        return RetrofitInstance.api.getAnimeList(
+            clientId = MALAuth.clientId,
+            query = query,
+            limit = limit,
+            offset = offset,
+            fields = fields
+        )
+    }
+
     suspend fun getAnimeRanking(
         rankingType: String,
         limit: Int,

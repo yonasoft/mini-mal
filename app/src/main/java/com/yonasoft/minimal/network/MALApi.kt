@@ -8,6 +8,15 @@ import retrofit2.http.*
 
 interface MALApi {
 
+    @GET("anime")
+    suspend fun getAnimeList(
+        @Header("X-MAL-CLIENT-ID") clientId: String,
+        @Query("q") query:String,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+        @Query("fields") fields: String
+    ): Response<Anime>
+
     @GET("anime/ranking")
     suspend fun getAnimeRanking(
         @Header("X-MAL-CLIENT-ID") clientId: String,
