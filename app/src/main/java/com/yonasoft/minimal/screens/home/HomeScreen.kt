@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.yonasoft.minimal.components.AnimeItemRow
 import com.yonasoft.minimal.components.CircularProgress
+import com.yonasoft.minimal.components.MiniButton
 import com.yonasoft.minimal.ui.theme.Blue1
 import com.yonasoft.minimal.ui.theme.Blue2
 
@@ -27,7 +28,7 @@ import com.yonasoft.minimal.ui.theme.Blue2
 fun HomeScreen(
     navController: NavController,
     homeViewModel: HomeViewModel,
-    //DO NOT remove the string parameter and the default value below. For an unknown reason, if it is removed the app will crash.
+    //DO NOT remove the string parameter and the default value below. For an unknown reason, removing it will result in crash when running application,
     filler:String = ""
 ) {
     Surface {
@@ -47,14 +48,7 @@ fun HomeScreen(
                     text = "Popular Airing",
                     color = Color.White
                 )
-                Card(
-                    modifier = Modifier
-                        .width(60.dp)
-                        .clickable { },
-                    backgroundColor = Blue1,
-                    shape = CircleShape,
-                    elevation = 12.dp
-                ) { Text(text = "more", textAlign = TextAlign.Center) }
+                MiniButton(onClick = {}, text = "more")
             }
             Spacer(modifier = Modifier.height(8.dp))
             if (homeViewModel.airRankingLoading) {
@@ -85,14 +79,7 @@ fun HomeScreen(
                     text = "Seasonal",
                     color = Color.White
                 )
-                Card(
-                    modifier = Modifier
-                        .width(60.dp)
-                        .clickable { },
-                    backgroundColor = Blue1,
-                    shape = CircleShape,
-                    elevation = 12.dp
-                ) { Text(text = "more", textAlign = TextAlign.Center) }
+                MiniButton(onClick = {}, text = "more")
             }
             Spacer(modifier = Modifier.height(8.dp))
             if (homeViewModel.seasonalLoading) {
@@ -120,6 +107,8 @@ fun HomeScreen(
         }
     }
 }
+
+
 
 
 

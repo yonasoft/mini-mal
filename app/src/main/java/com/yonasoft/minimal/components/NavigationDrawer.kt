@@ -47,7 +47,7 @@ fun LoggedOutDrawerBody(
                     )
                 }
             } else {
-                //TODO:
+                //TODO: Login/Logout
                 Row(modifier = Modifier.padding(top = 12.dp)) {
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(
