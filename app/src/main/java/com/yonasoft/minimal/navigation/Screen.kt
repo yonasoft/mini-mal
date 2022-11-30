@@ -6,6 +6,7 @@ sealed class Screen(val route:String){
     object AnimeListScreen:Screen("anime_list")
     object MangaListScreen:Screen("manga_list")
     object HomeScreen:Screen("home")
+    object MainScreen:Screen("main")
     object SearchScreen:Screen("search")
 
     fun withArgs(vararg args:String): String {

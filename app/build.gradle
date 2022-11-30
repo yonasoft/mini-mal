@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
+    id "org.jlleitschuh.gradle.ktlint" version "11.0.0"
 }
 
 android {
@@ -48,8 +49,17 @@ android {
     }
 }
 
-dependencies {
+ktlint{
+    android = true
+    ignoreFailures = false
+    reporters{
+        reporter "plain"
+        reporter "checkstyle"
+        reporter "sarif"
+    }
+}
 
+dependencies {
 
     def nav_version = "2.5.3"
 

@@ -17,7 +17,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
-    var searchQuery by mutableStateOf("")
 
     var airingRanking: List<AnimeDetail> by mutableStateOf(listOf())
     var airRankingLoading: Boolean by mutableStateOf(false)
@@ -63,21 +62,13 @@ class HomeViewModel @Inject constructor(private val repository: Repository) : Vi
     private suspend fun initializeSeasonal() {
         seasonalLoading = true
         val season = when (Calendar.getInstance().get(Calendar.MONTH)) {
-            0 -> "winter"
-            1 -> "winter"
-            2 -> "winter"
-            3 -> "spring"
-            4 -> "spring"
-            5 -> "spring"
-            6 -> "summer"
-            7 -> "summer"
-            8 -> "summer"
-            9 -> "fall"
-            10 -> "fall"
-            11 -> "fall"
-
-            else -> {""}
+            0,1,2 -> "winter"
+            3,4,5 -> "spring"
+            6,7,8 -> "summer"
+            9,10,11 -> "fall"
+            else -> ""
         }
+
         val response =
             try {
                 repository.getAnimeSeasonal(

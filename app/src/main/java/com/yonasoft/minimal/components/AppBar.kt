@@ -23,6 +23,7 @@ import com.yonasoft.minimal.ui.theme.Blue1
 fun HomeAppBar(
     text: String,
     onSearch: () -> Unit,
+    onCancel: () -> Unit,
     onTextChange: (String) -> Unit,
     navigationIconClick: () -> Unit,
 ) {
@@ -43,7 +44,11 @@ fun HomeAppBar(
                     contentDescription = "Toggle Drawer"
                 )
             }
-            SearchTextField(text = text, onSearch = { onSearch() }, onTextChange = {onTextChange(it)})
+            SearchTextField(
+                text = text,
+                onSearch = { onSearch() },
+                onCancel = { onCancel() },
+                onTextChange = { onTextChange(it) })
         }
     }
 }
@@ -51,9 +56,11 @@ fun HomeAppBar(
 @Composable
 fun SearchAppBar(
     navController: NavController,
-    text: String="",
+    text: String = "",
     onSearch: () -> Unit,
+    onCancel: () -> Unit,
     onTextChange: (String) -> Unit,
+    onNavigateBack: () -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -66,13 +73,17 @@ fun SearchAppBar(
                 .background(Blue1),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(onClick = { navController.popBackStack() }) {
+            IconButton(onClick = { onNavigateBack() }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Go Back"
                 )
             }
-            SearchTextField(text = text, onSearch = { onSearch() }, onTextChange = {onTextChange(it)})
+            SearchTextField(
+                text = text,
+                onSearch = { onSearch() },
+                onCancel = { onCancel() },
+                onTextChange = { onTextChange(it) })
         }
     }
 }

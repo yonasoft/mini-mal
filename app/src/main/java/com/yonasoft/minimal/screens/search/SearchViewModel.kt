@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yonasoft.minimal.model.anime_detail_model.AnimeDetail
@@ -16,30 +15,24 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor( private var repository: Repository, state: SavedStateHandle) : ViewModel() {
+class SearchViewModel @Inject constructor(
+    private var repository: Repository,
+) : ViewModel() {
     var searchQuery by mutableStateOf("")
 
     var searchResult by mutableStateOf(listOf<AnimeDetail>())
     var searchLoading by mutableStateOf(false)
 
 
-    init {
-        //Passing an empty string as an arg when navigating leads to an error.
-        //Multiple alternatives and work-arounds were attempted but what you see below is best option out of them.
-        //A string with just a space is passed and then SearchViewModel will initial based on if the arg is " " or something else(User input)
-         if (state.get<String>("initial_search")!=" ") {
-             searchQuery = state.get<String>("initial_search").toString()
-         }
-        getAnimeList(searchQuery)
-    }
-
-    fun getAnimeList(query:String){
-        viewModelScope.launch {
-            getAnimeListPrivate(query = query)
+    fun getAnimeList(query: String = searchQuery) {
+        if(query.isNotEmpty()) {
+            viewModelScope.launch {
+                getAnimeListPrivate(query = query)
+            }
         }
     }
 
-    private suspend fun getAnimeListPrivate(query:String) {
+    private suspend fun getAnimeListPrivate(query: String) {
         searchLoading = true
         val searchResponse =
             try {
@@ -58,7 +51,7 @@ class SearchViewModel @Inject constructor( private var repository: Repository, s
             }
         if (searchResponse.isSuccessful && searchResponse.body() != null) {
             val result = mutableListOf<AnimeDetail>()
-            for(item in searchResponse.body()!!.data){
+            for (item in searchResponse.body()!!.data) {
                 getAnimeDetail(item.node.id)?.let { result.add(it) }
             }
             searchResult = result
@@ -66,7 +59,7 @@ class SearchViewModel @Inject constructor( private var repository: Repository, s
         }
     }
 
-    private suspend fun getAnimeDetail(animeId:Int): AnimeDetail? {
+    private suspend fun getAnimeDetail(animeId: Int): AnimeDetail? {
         val response =
             try {
                 repository.getAnimeDetails(animeId = animeId)
@@ -79,7 +72,7 @@ class SearchViewModel @Inject constructor( private var repository: Repository, s
             }
         return if (response.isSuccessful && response.body() != null) {
             response.body()
-        } else{
+        } else {
             null
         }
     }

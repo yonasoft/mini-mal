@@ -3,12 +3,13 @@ package com.yonasoft.minimal
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.yonasoft.minimal.navigation.Navigation
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.yonasoft.minimal.navigation.RootNavigation
+import com.yonasoft.minimal.screens.home.HomeViewModel
+import com.yonasoft.minimal.screens.search.SearchViewModel
 import com.yonasoft.minimal.ui.theme.MiniMALTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,11 +26,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MiniMALApp(){
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
-    ) {
-        Navigation()
-    }
+fun MiniMALApp() {
+    val navController = rememberNavController()
+    val homeViewModel:HomeViewModel = viewModel()
+    val searchViewModel:SearchViewModel = viewModel()
+    RootNavigation(navController = navController, homeViewModel = homeViewModel, searchViewModel = searchViewModel)
 }

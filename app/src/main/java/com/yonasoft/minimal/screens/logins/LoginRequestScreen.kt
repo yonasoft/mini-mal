@@ -1,4 +1,4 @@
-package com.yonasoft.minimal.screens
+package com.yonasoft.minimal.screens.logins
 
 import android.content.Context
 import android.net.Uri

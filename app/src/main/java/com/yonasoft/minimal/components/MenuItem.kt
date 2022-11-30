@@ -1,4 +1,4 @@
-package com.yonasoft.minimal.model
+package com.yonasoft.minimal.components
 
 
 import androidx.compose.material.icons.Icons

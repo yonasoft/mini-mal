@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.yonasoft.minimal.components.AnimeItemColumn
 import com.yonasoft.minimal.components.CircularProgress
@@ -23,8 +22,7 @@ import com.yonasoft.minimal.ui.theme.Blue2
 @Composable
 fun SearchScreen(
     navController: NavController,
-    initialSearch: String = "",
-    searchViewModel: SearchViewModel = hiltViewModel()
+    searchViewModel: SearchViewModel
 ) {
 
 
@@ -32,14 +30,19 @@ fun SearchScreen(
         SearchAppBar(text = searchViewModel.searchQuery,
             navController = navController,
             onSearch = { searchViewModel.getAnimeList(searchViewModel.searchQuery) },
-            onTextChange = { searchViewModel.searchQuery = it })
+            onCancel = {searchViewModel.searchQuery = ""},
+            onTextChange = { searchViewModel.searchQuery = it },
+            onNavigateBack = {
+                navController.popBackStack()
+            }
+            )
     }
     ) {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it).
-                    background(Blue2)
+                .padding(it)
+                .background(Blue2)
         ) {
             if (searchViewModel.searchLoading) {
                 CircularProgress(
@@ -50,7 +53,9 @@ fun SearchScreen(
                     strokeWidth = 12.dp
                 )
             } else {
-                LazyColumn(modifier = Modifier.background(Blue2).fillMaxSize()) {
+                LazyColumn(modifier = Modifier
+                    .background(Blue2)
+                    .fillMaxSize()) {
                     items(searchViewModel.searchResult) { anime ->
                         AnimeItemColumn(animeDetail = anime, onClick = {})
                     }

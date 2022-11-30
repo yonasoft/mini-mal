@@ -1,12 +1,17 @@
 package com.yonasoft.minimal.components
 
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -23,7 +28,8 @@ import com.yonasoft.minimal.ui.theme.Blue2
 fun SearchTextField(
     text:String,
     onTextChange: (String) -> Unit,
-    onSearch: () -> Unit
+    onSearch: () -> Unit,
+    onCancel: () -> Unit
 ) {
 
     TextField(
@@ -46,9 +52,18 @@ fun SearchTextField(
         },
         maxLines = 1,
         trailingIcon = {
-            IconButton(onClick = { onSearch()}) {
-                Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+            Row() {
+                IconButton(onClick = { onCancel() }) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Clear Search Text"
+                    )
+                }
+                IconButton(onClick = { onSearch()}) {
+                    Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+                }
             }
+
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(

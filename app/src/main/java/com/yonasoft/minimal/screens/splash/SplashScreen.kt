@@ -38,7 +38,7 @@ fun SplashScreen(navController: NavController) {
     LaunchedEffect(key1 = true) {
         delay(2000L)
         //TODO: Check if logged in adn navigate to either login screen or home screen
-        navController.navigate(Screen.HomeScreen.route) {
+        navController.navigate(Screen.MainScreen.route) {
             popUpTo(Screen.SplashScreen.route) {
                 inclusive = true
             }

@@ -16,8 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.yonasoft.minimal.R
-import com.yonasoft.minimal.model.MenuDestination
-import com.yonasoft.minimal.model.MenuItem
 
 @Composable
 fun LoggedOutDrawerBody(
