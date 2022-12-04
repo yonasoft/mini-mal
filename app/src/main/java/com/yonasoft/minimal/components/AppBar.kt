@@ -5,16 +5,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Surface
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.yonasoft.minimal.ui.theme.Blue1
 
@@ -55,7 +55,6 @@ fun HomeAppBar(
 
 @Composable
 fun SearchAppBar(
-    navController: NavController,
     text: String = "",
     onSearch: () -> Unit,
     onCancel: () -> Unit,
@@ -88,3 +87,30 @@ fun SearchAppBar(
     }
 }
 
+@Composable
+fun SimpleAppBar(
+    text: String = "",
+    onNavigateBack: () -> Unit,
+) {
+    TopAppBar(
+        modifier = Modifier
+            .height(64.dp)
+            .fillMaxWidth(),
+        title = {
+            Text(
+                text = text,
+                fontSize = 16.sp,
+                color = Color.White
+            )
+        },
+        backgroundColor = Blue1,
+        navigationIcon = {
+            IconButton(onClick = { onNavigateBack() }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Go Back"
+                )
+            }
+        }
+    )
+}

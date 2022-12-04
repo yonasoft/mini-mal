@@ -1,32 +1,30 @@
 package com.yonasoft.minimal.screens.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.yonasoft.minimal.components.AnimeItemRow
 import com.yonasoft.minimal.components.CircularProgress
 import com.yonasoft.minimal.components.MiniButton
+import com.yonasoft.minimal.navigation.Screen
 import com.yonasoft.minimal.ui.theme.Blue1
 import com.yonasoft.minimal.ui.theme.Blue2
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
+    botNavController: NavController,
+    rootNavController: NavController,
     homeViewModel: HomeViewModel,
     //DO NOT remove the string parameter and the default value below. For an unknown reason, removing it will result in crash when running application,
     filler:String = ""
@@ -63,9 +61,11 @@ fun HomeScreen(
                 )
             } else {
                 LazyRow {
-                    items(homeViewModel.airingRanking) { item ->
-                        AnimeItemRow(animeDetail = item) {
-
+                    items(homeViewModel.airingRanking) { anime ->
+                        AnimeItemRow(animeDetail = anime) {
+                            rootNavController.navigate(
+                                Screen.AnimeDetailScreen.withArgs(anime.id.toString())
+                            )
                         }
                     }
                 }
@@ -94,11 +94,13 @@ fun HomeScreen(
                 )
             } else {
                 LazyRow {
-                    items(homeViewModel.seasonal) { item ->
+                    items(homeViewModel.seasonal) { anime ->
                         AnimeItemRow(
-                            animeDetail = item,
+                            animeDetail = anime,
                         ) {
-
+                            rootNavController.navigate(
+                                Screen.AnimeDetailScreen.withArgs(anime.id.toString())
+                            )
                         }
                     }
                 }

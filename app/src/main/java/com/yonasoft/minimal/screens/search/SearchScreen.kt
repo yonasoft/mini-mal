@@ -16,6 +16,7 @@ import androidx.navigation.NavController
 import com.yonasoft.minimal.components.AnimeItemColumn
 import com.yonasoft.minimal.components.CircularProgress
 import com.yonasoft.minimal.components.SearchAppBar
+import com.yonasoft.minimal.navigation.Screen
 import com.yonasoft.minimal.ui.theme.Blue1
 import com.yonasoft.minimal.ui.theme.Blue2
 
@@ -25,17 +26,14 @@ fun SearchScreen(
     searchViewModel: SearchViewModel
 ) {
 
-
     Scaffold(topBar = {
         SearchAppBar(text = searchViewModel.searchQuery,
-            navController = navController,
             onSearch = { searchViewModel.getAnimeList(searchViewModel.searchQuery) },
-            onCancel = {searchViewModel.searchQuery = ""},
-            onTextChange = { searchViewModel.searchQuery = it },
-            onNavigateBack = {
-                navController.popBackStack()
-            }
-            )
+            onCancel = { searchViewModel.searchQuery = "" },
+            onTextChange = { searchViewModel.searchQuery = it }
+        ) {
+            navController.popBackStack()
+        }
     }
     ) {
         Surface(
@@ -53,11 +51,18 @@ fun SearchScreen(
                     strokeWidth = 12.dp
                 )
             } else {
-                LazyColumn(modifier = Modifier
-                    .background(Blue2)
-                    .fillMaxSize()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .background(Blue2)
+                        .fillMaxSize()
+                ) {
                     items(searchViewModel.searchResult) { anime ->
-                        AnimeItemColumn(animeDetail = anime, onClick = {})
+                        AnimeItemColumn(animeDetail = anime,
+                            onClick = {
+                                navController.navigate(
+                                    Screen.AnimeDetailScreen.withArgs(anime.id.toString())
+                                )
+                            })
                     }
                 }
             }

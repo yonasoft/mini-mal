@@ -28,14 +28,14 @@ import java.util.*
 @Composable
 fun AnimeItemRow(
     animeDetail: AnimeDetail,
-    onClick: (AnimeDetail) -> Unit
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .width(280.dp)
             .height(160.dp)
-            .clickable { onClick(animeDetail) },
+            .clickable { onClick() },
         backgroundColor = Color.White,
         elevation = 28.dp,
         shape = RoundedCornerShape(16.dp)

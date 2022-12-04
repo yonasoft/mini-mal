@@ -1,6 +1,7 @@
 package com.yonasoft.minimal.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -22,10 +23,11 @@ import java.util.*
 @Composable
 fun AnimeItemColumn(
     animeDetail: AnimeDetail,
-    onClick: (AnimeDetail) -> Unit
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
+            .clickable { onClick() }
             .fillMaxWidth()
             .height(160.dp)
             .padding(8.dp),

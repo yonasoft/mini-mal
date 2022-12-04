@@ -7,7 +7,6 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.yonasoft.minimal.components.*
@@ -19,7 +18,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun MainScreen(navController:NavController,
+fun MainScreen(rootNavController:NavHostController,
                bottomNavController: NavHostController = rememberNavController(),
                 homeViewModel: HomeViewModel,
                searchViewModel: SearchViewModel,
@@ -34,7 +33,7 @@ fun MainScreen(navController:NavController,
                 text = searchViewModel.searchQuery,
                 onSearch = {
                     searchViewModel.getAnimeList()
-                    navController.navigate(
+                    rootNavController.navigate(
                         Screen.SearchScreen.route
                     )
                 },
@@ -51,14 +50,14 @@ fun MainScreen(navController:NavController,
             DrawerHeader()
             LoggedOutDrawerBody(
                 items = MenuItems.loggedOutItems,
-                navController = navController,
-                onClick = { navController.navigate(it.route) })
+                navController = rootNavController,
+                onClick = { rootNavController.navigate(it.route) })
             //TODO: Change to if state for logged in vs logged out
         },
         bottomBar = { BottomBar(navController = bottomNavController) }) {
 
         Surface(modifier = Modifier.padding(it)) {
-            BottomNavigation(navController = bottomNavController, homeViewModel = homeViewModel)
+            BottomNavigation(rootNavHostController = rootNavController, botNavController = bottomNavController, homeViewModel = homeViewModel)
         }
 
     }

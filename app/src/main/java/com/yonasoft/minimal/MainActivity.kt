@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.yonasoft.minimal.navigation.RootNavigation
@@ -27,8 +26,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MiniMALApp() {
-    val navController = rememberNavController()
+    val rootNavController = rememberNavController()
     val homeViewModel:HomeViewModel = viewModel()
     val searchViewModel:SearchViewModel = viewModel()
-    RootNavigation(navController = navController, homeViewModel = homeViewModel, searchViewModel = searchViewModel)
+    RootNavigation(rootNavController = rootNavController, homeViewModel = homeViewModel, searchViewModel = searchViewModel)
 }

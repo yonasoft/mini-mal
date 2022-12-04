@@ -12,19 +12,24 @@ import com.yonasoft.minimal.screens.manga_list.MangaListScreen
 
 
 @Composable
-fun BottomNavigation(navController:NavHostController = rememberNavController(), homeViewModel: HomeViewModel) {
+fun BottomNavigation(
+    rootNavHostController: NavHostController,
+    botNavController: NavHostController = rememberNavController(),
+    homeViewModel: HomeViewModel
+) {
 
-    NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
+    NavHost(navController = botNavController, startDestination = Screen.HomeScreen.route) {
 
         composable(route = Screen.HomeScreen.route) {
-            HomeScreen(navController = navController, homeViewModel = homeViewModel)
+            HomeScreen(rootNavController = rootNavHostController, botNavController = botNavController, homeViewModel = homeViewModel)
         }
         composable(route = Screen.AnimeListScreen.route) {
-            AnimeListScreen(navController = navController)
+            AnimeListScreen(rootNavController = rootNavHostController, botNavController = botNavController)
         }
         composable(route = Screen.MangaListScreen.route) {
-            MangaListScreen(navController = navController)
+            MangaListScreen(rootNavController = rootNavHostController, botNavController = botNavController)
         }
+
 
     }
 }

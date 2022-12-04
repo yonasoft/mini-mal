@@ -59,7 +59,7 @@ fun LoginRequestScreen(navController: NavController) {
                 }
                 Button(
                     onClick = {
-                        navController.navigate(Screen.HomeScreen.route)
+                        navController.navigate(Screen.MainScreen.route)
                     },
                     modifier = Modifier.padding(),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Blue2),
@@ -76,18 +76,18 @@ fun LoginRequestScreen(navController: NavController) {
                     .fillMaxHeight(.5f)
             ) {
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 84.dp),
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Checkbox(checked = checked, onCheckedChange = { checked = !checked })
-                    Text(
-                        text = "Don't show at startup. You can still login from he side bar!",
-                        fontSize = 16.sp
-                    )
-                }
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(top = 84.dp),
+//                    verticalAlignment = Alignment.Bottom
+//                ) {
+//                    Checkbox(checked = checked, onCheckedChange = { checked = !checked })
+//                    Text(
+//                        text = "Don't show at startup. You can still login from he side bar!",
+//                        fontSize = 16.sp
+//                    )
+//                }
             }
         }
     }

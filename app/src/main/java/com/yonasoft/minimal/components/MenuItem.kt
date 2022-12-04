@@ -29,25 +29,19 @@ data class MenuSection(
 @Singleton
 object MenuItems {
     val loggedOutItems = listOf(
-        MenuDestination(
-            route = Screen.HomeScreen.route,
-            title = "Home",
-            icon = Icons.Default.Home,
-            contentDescription = "Navigate to Home",
-        ),
         MenuSection(
             title = "Discover",
             contentDescription = "Discover Section"
         ),
 
         MenuDestination(
-            route = "",
+            route = Screen.RankingScreen.route,
             title = "Top",
             icon = Icons.Default.Leaderboard,
             contentDescription = "Navigate to Top Anime",
         ),
         MenuDestination(
-            route = "",
+            route = Screen.SeasonalScreen.route,
             title = "Seasonal",
             icon = Icons.Default.DateRange,
             contentDescription = "Navigate to Seasonal Anime",
