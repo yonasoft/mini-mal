@@ -57,12 +57,13 @@ fun SearchScreen(
                         .fillMaxSize()
                 ) {
                     items(searchViewModel.searchResult) { anime ->
-                        AnimeItemColumn(animeDetail = anime,
-                            onClick = {
-                                navController.navigate(
-                                    Screen.AnimeDetailScreen.withArgs(anime.id.toString())
-                                )
-                            })
+                        AnimeItemColumn(
+                            animeDetail = anime
+                        ) {
+                            navController.navigate(
+                                Screen.AnimeDetailScreen.withArgs(anime.id.toString())
+                            )
+                        }
                     }
                 }
             }

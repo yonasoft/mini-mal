@@ -22,11 +22,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.yonasoft.minimal.components.CircularProgress
 import com.yonasoft.minimal.components.SimpleAppBar
 import com.yonasoft.minimal.model.anime_detail_model.AnimeDetail
+import com.yonasoft.minimal.navigation.Screen
 import com.yonasoft.minimal.ui.theme.Blue1
 import com.yonasoft.minimal.ui.theme.Blue2
 import java.util.*
@@ -67,7 +69,7 @@ fun AnimeDetailScreen(
                 )
         ) {
             if (!loadingDetail) {
-                Detail(context = LocalContext.current,animeDetail = animeDetail!!)
+                Detail(navController = navController, context = LocalContext.current,animeDetail = animeDetail!!)
             } else {
                 CircularProgress(
                     boxModifier = Modifier.fillMaxSize(),
@@ -85,6 +87,7 @@ fun AnimeDetailScreen(
 
 @Composable
 fun Detail(
+    navController:NavController,
     modifier: Modifier = Modifier,
     context:Context,
     animeDetail: AnimeDetail
@@ -177,10 +180,25 @@ fun Detail(
             text = "Studios: ${animeDetail.studios.joinToString(separator = ", ") { it.name }}",
             fontSize = 20.sp, color = Color.White
         )
+
+        Text(
+            text = "Source: ${animeDetail.source}",
+            fontSize = 20.sp, color = Color.White
+        )
+        Text(
+            text = "Rating: ${animeDetail.rating}",
+            fontSize = 20.sp, color = Color.White
+        )
+        Text(
+            text = "Broadcast: ${animeDetail.broadcast.day_of_the_week}, ${animeDetail.broadcast.start_time}",
+            fontSize = 20.sp, color = Color.White
+        )
         Spacer(modifier = Modifier.height(8.dp))
 
         SendElseWhere(text = "Recommendations",
-            onClick = {})
+            onClick = {
+                navController.navigate(Screen.RecommendationsScreen.withArgs(animeDetail.id.toString()))
+            })
         Spacer(modifier = Modifier.height(12.dp))
         SendElseWhere(text = "Open in Browser",
             onClick = {
@@ -202,7 +220,7 @@ private fun SendElseWhere(text: String, onClick:() -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = text, color = Blue1, fontSize = 16.sp)
-        IconButton(onClick = {  }) {
+        IconButton(onClick = {  onClick()}) {
             Icon(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = "Go to Recommendations"

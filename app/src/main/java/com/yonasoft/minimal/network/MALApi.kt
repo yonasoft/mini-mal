@@ -5,9 +5,8 @@ import com.yonasoft.minimal.model.anime_model.Anime
 import retrofit2.Response
 import retrofit2.http.*
 
-
+//Api to access MAL's data
 interface MALApi {
-
     @GET("anime")
     suspend fun getAnimeList(
         @Header("X-MAL-CLIENT-ID") clientId: String,

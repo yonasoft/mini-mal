@@ -1,5 +1,6 @@
 package com.yonasoft.minimal.network
 
+//File to provide MAL authentication information utilities
 class MALAuth {
     companion object {
         val responseType = "code"

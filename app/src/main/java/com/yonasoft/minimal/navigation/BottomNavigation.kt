@@ -10,7 +10,7 @@ import com.yonasoft.minimal.screens.home.HomeScreen
 import com.yonasoft.minimal.screens.home.HomeViewModel
 import com.yonasoft.minimal.screens.manga_list.MangaListScreen
 
-
+//Bottom navigation for bottom nav bar to navigate and used for screen within Main Screen
 @Composable
 fun BottomNavigation(
     rootNavHostController: NavHostController,

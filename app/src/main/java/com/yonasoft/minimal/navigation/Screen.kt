@@ -1,5 +1,6 @@
 package com.yonasoft.minimal.navigation
 
+//Available screens for this app
 sealed class Screen(val route:String){
     object SplashScreen: Screen("splash")
     object LoginRequestScreen:Screen("login_request")
@@ -11,6 +12,7 @@ sealed class Screen(val route:String){
     object AnimeDetailScreen:Screen("anime_detail")
     object RankingScreen:Screen("ranking")
     object SeasonalScreen:Screen("seasonal")
+    object RecommendationsScreen:Screen("recommendations")
 
     fun withArgs(vararg args:String): String {
         return buildString{

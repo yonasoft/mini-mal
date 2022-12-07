@@ -22,13 +22,13 @@ class AnimeDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private var animeId: Int = 41467
+    private var animeId: Int = savedStateHandle["anime_id"]!!
     var loadingDetail by mutableStateOf(true)
     var animeDetail: AnimeDetail? = null
 
     init {
-        animeId = savedStateHandle["anime_id"]!!
         getAnimeDetail(animeId = animeId)
+
     }
 
     private fun getAnimeDetail(animeId: Int) {
