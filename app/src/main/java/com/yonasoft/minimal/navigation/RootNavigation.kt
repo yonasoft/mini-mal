@@ -2,6 +2,7 @@ package com.yonasoft.minimal.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -74,10 +75,10 @@ fun RootNavigation(
             )
         }
         composable(route = Screen.RankingScreen.route) {
-            RankingScreen()
+            RankingScreen(navController = rootNavController, rankingViewModel = hiltViewModel())
         }
         composable(route = Screen.SeasonalScreen.route) {
-            SeasonalScreen()
+            SeasonalScreen(navController = rootNavController, seasonalViewModel = hiltViewModel())
         }
     }
 }

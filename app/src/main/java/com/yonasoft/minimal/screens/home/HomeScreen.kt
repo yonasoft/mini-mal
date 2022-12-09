@@ -46,7 +46,7 @@ fun HomeScreen(
                     text = "Popular Airing",
                     color = Color.White
                 )
-                MiniButton(onClick = {}, text = "more")
+                MiniButton(onClick = { rootNavController.navigate(Screen.RankingScreen.route)}, text = "more")
             }
             Spacer(modifier = Modifier.height(8.dp))
             if (homeViewModel.airRankingLoading) {
@@ -79,7 +79,7 @@ fun HomeScreen(
                     text = "Seasonal",
                     color = Color.White
                 )
-                MiniButton(onClick = {}, text = "more")
+                MiniButton(onClick = {rootNavController.navigate(Screen.SeasonalScreen.route)}, text = "more")
             }
             Spacer(modifier = Modifier.height(8.dp))
             if (homeViewModel.seasonalLoading) {
