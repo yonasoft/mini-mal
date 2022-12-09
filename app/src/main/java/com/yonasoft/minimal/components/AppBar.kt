@@ -1,23 +1,21 @@
 package com.yonasoft.minimal.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yonasoft.minimal.ui.theme.Blue1
+import java.util.*
 
 
 @Composable
@@ -204,9 +202,27 @@ fun RankingAppBar(
 fun SeasonalAppBar(
     title: String,
     onNavigateBack: () -> Unit,
-    onSelect: (String) -> Unit
+    initialSeason: String,
+    initialYear: Int,
+    onOk: (String, Int) -> Unit
 ) {
+    var expanded by remember {
+        mutableStateOf(false)
+    }
 
+    var season by remember {
+        mutableStateOf(initialSeason)
+    }
+    var year by remember {
+        mutableStateOf(initialYear)
+    }
+
+    val seasons = listOf("Winter", "Spring", "Summer", "Fall")
+    var selectedSeason by remember { mutableStateOf(season.replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(
+            Locale.getDefault()
+        ) else it.toString()
+    }) }
 
     TopAppBar(modifier = Modifier,
         title = {
@@ -225,9 +241,58 @@ fun SeasonalAppBar(
             }
         },
         actions = {
-            IconButton(onClick = { }) {
-                Icon(imageVector = Icons.Default.GridView, contentDescription = "Sort items")
+            IconButton(onClick = {
+                expanded = true
+            }) {
+                Icon(imageVector = Icons.Default.Sort, contentDescription = "Sort items")
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }) {
+                    Column(
+                        horizontalAlignment = CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Row(modifier = Modifier.width(240.dp)) {
+                            Column(modifier = Modifier.fillMaxWidth(.5f)) {
+                                Text(text = "Season")
+                                seasons.forEach {
+                                    val isSelected = it == selectedSeason
+                                Row {
+                                    RadioButton(selected = isSelected, onClick = {
+                                        selectedSeason = it
+                                        season = it.lowercase()
+                                    })
+                                    Text(text = it)
+                                }
+                                }
+                            }
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(end = 2.dp)
+                            ) {
+                                Text(text = "Year")
+                                TextField(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    value = year.toString(),
+                                    onValueChange = { year = it.toInt() },
+                                    maxLines = 1
+                                )
+                            }
+                        }
 
+                        Button(modifier = Modifier
+                            .align(CenterHorizontally)
+                            .padding(top = 16.dp),
+                            onClick = {
+                                onOk(season, year)
+                                expanded = false
+                            }
+                        ) {
+                            Text(text = "Ok")
+                        }
+                    }
+                }
             }
         }
     )
