@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yonasoft.minimal.model.anime_detail_model.AnimeDetail
+import com.yonasoft.minimal.model.manga_detail_model.MangaDetail
 import com.yonasoft.minimal.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,8 +21,11 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
     var searchQuery by mutableStateOf("")
 
-    var searchResult by mutableStateOf(listOf<AnimeDetail>())
-    var searchLoading by mutableStateOf(false)
+    var animeResult by mutableStateOf(listOf<AnimeDetail>())
+    var mangaResult by mutableStateOf(listOf<MangaDetail>())
+
+    var animeLoading by mutableStateOf(false)
+    var mangaLoading by mutableStateOf(false)
 
 
     fun getAnimeList(query: String = searchQuery) {
@@ -32,8 +36,16 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    fun getMangaList(query: String = searchQuery) {
+        if(query.isNotEmpty()) {
+            viewModelScope.launch {
+                getMangaListPrivate(query = query)
+            }
+        }
+    }
+
     private suspend fun getAnimeListPrivate(query: String) {
-        searchLoading = true
+        animeLoading = true
         val searchResponse =
             try {
                 repository.getAnimeList(
@@ -54,8 +66,8 @@ class SearchViewModel @Inject constructor(
             for (item in searchResponse.body()!!.data) {
                 getAnimeDetail(item.node.id)?.let { result.add(it) }
             }
-            searchResult = result
-            searchLoading = false
+            animeResult = result
+            animeLoading = false
         }
     }
 
@@ -77,4 +89,51 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+
+    private suspend fun getMangaListPrivate(query: String) {
+        mangaLoading = true
+        val searchResponse =
+            try {
+                repository.getMangaList(
+                    query = query,
+                    limit = 50,
+                    offset = 0,
+                    fields = ""
+                )
+            } catch (e: IOException) {
+                Log.e("HVM", "IOException")
+                return
+            } catch (e: HttpException) {
+                Log.e("HVM", "HttpException")
+                return
+            }
+        if (searchResponse.isSuccessful && searchResponse.body() != null) {
+            Log.d("manga list","${searchResponse.body()}")
+            val result = mutableListOf<MangaDetail>()
+            for (item in searchResponse.body()!!.data) {
+                getMangaDetail(item.node.id)?.let { result.add(it) }
+            }
+            mangaResult = result
+            mangaLoading = false
+        }
+    }
+
+    private suspend fun getMangaDetail(mangaId: Int): MangaDetail? {
+        val response =
+            try {
+                repository.getMangaDetails(mangaId = mangaId)
+            } catch (e: IOException) {
+                Log.e("HVM", "IOException")
+                return null
+            } catch (e: HttpException) {
+                Log.e("HVM", "HttpException")
+                return null
+            }
+        Log.d("manga list","${response.body()}")
+        return if (response.isSuccessful && response.body() != null) {
+            response.body()
+        } else {
+            null
+        }
+    }
 }

@@ -33,6 +33,7 @@ fun MainScreen(rootNavController:NavHostController,
                 text = searchViewModel.searchQuery,
                 onSearch = {
                     searchViewModel.getAnimeList()
+                    searchViewModel.getMangaList()
                     rootNavController.navigate(
                         Screen.SearchScreen.route
                     )

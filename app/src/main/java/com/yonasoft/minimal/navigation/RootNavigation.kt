@@ -2,7 +2,6 @@ package com.yonasoft.minimal.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -12,6 +11,7 @@ import com.yonasoft.minimal.screens.animedetail.AnimeDetailScreen
 import com.yonasoft.minimal.screens.home.HomeViewModel
 import com.yonasoft.minimal.screens.logins.LoginRequestScreen
 import com.yonasoft.minimal.screens.main.MainScreen
+import com.yonasoft.minimal.screens.manga_detail.MangaDetailScreen
 import com.yonasoft.minimal.screens.rankings.RankingScreen
 import com.yonasoft.minimal.screens.recommendations.RecommendationScreens
 import com.yonasoft.minimal.screens.search.SearchScreen
@@ -47,23 +47,52 @@ fun RootNavigation(
             LoginRequestScreen(navController = rootNavController)
         }
         //Anime id needed to access details
-        composable(route = Screen.AnimeDetailScreen.route+"/{anime_id}",
+        composable(route = Screen.AnimeDetailScreen.route + "/{anime_id}",
             arguments = listOf(navArgument("anime_id") {
                 type = NavType.IntType
             }
             )
 
         ) { entry ->
-            entry.arguments?.getInt("anime_id")?.let { AnimeDetailScreen(navController = rootNavController, animeId = it, detailViewModel = hiltViewModel()) }
+            entry.arguments?.getInt("anime_id")?.let {
+                AnimeDetailScreen(
+                    navController = rootNavController,
+                    animeId = it,
+                    detailViewModel = hiltViewModel()
+                )
+            }
         }
+
+        composable(route = Screen.MangaDetailScreen.route + "/{manga_id}",
+            arguments = listOf(navArgument("manga_id") {
+                type = NavType.IntType
+            }
+            )
+
+        ) { entry ->
+            entry.arguments?.getInt("manga_id")?.let {
+                MangaDetailScreen(
+                    navController = rootNavController,
+                    mangaId = it,
+                    detailViewModel = hiltViewModel()
+                )
+            }
+        }
+
         //Anime id needed to access details and its recommended animes
-        composable(route = Screen.RecommendationsScreen.route+"/{anime_id2}",
+        composable(route = Screen.RecommendationsScreen.route + "/{anime_id2}",
             arguments = listOf(navArgument("anime_id2") {
                 type = NavType.IntType
             }
             )
         ) { entry ->
-            entry.arguments?.getInt("anime_id2")?.let { RecommendationScreens(navController = rootNavController, animeId = it, recommendationsViewModel = hiltViewModel()) }
+            entry.arguments?.getInt("anime_id2")?.let {
+                RecommendationScreens(
+                    navController = rootNavController,
+                    animeId = it,
+                    recommendationsViewModel = hiltViewModel()
+                )
+            }
         }
 
         composable(

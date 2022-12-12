@@ -2,14 +2,15 @@ package com.yonasoft.minimal.repository
 
 import com.yonasoft.minimal.model.anime_detail_model.AnimeDetail
 import com.yonasoft.minimal.model.anime_model.Anime
+import com.yonasoft.minimal.model.manga_detail_model.MangaDetail
+import com.yonasoft.minimal.model.manga_model.Manga
 import com.yonasoft.minimal.network.MALAuth
 import com.yonasoft.minimal.network.RetrofitInstance
 import retrofit2.Response
 import javax.inject.Singleton
 
 @Singleton
-class Repository(
-) {
+class Repository {
     suspend fun getAnimeList(
         query: String,
         limit: Int,
@@ -80,6 +81,32 @@ class Repository(
             clientId = clientId,
             animeId = animeId,
             fields = "id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_episodes,start_season,broadcast,source,average_episode_duration,rating,pictures,background,related_anime,related_manga,recommendations,studios,statistics"
+        )
+    }
+
+    suspend fun getMangaList(
+        query: String,
+        limit: Int,
+        offset: Int,
+        fields: String
+    ): Response<Manga> {
+        return RetrofitInstance.api.getMangaList(
+            clientId = MALAuth.clientId,
+            query = query,
+            limit = limit,
+            offset = offset,
+            fields = fields
+        )
+    }
+
+    suspend fun getMangaDetails(
+        clientId: String = MALAuth.clientId,
+        mangaId: Int,
+    ):Response<MangaDetail> {
+        return RetrofitInstance.api.getMangaDetails(
+            clientId = clientId,
+            mangaId = mangaId,
+            fields = "id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_volumes,num_chapters,authors{first_name,last_name},pictures,background,related_anime,related_manga,recommendations,serialization"
         )
     }
 }

@@ -1,4 +1,4 @@
-package com.yonasoft.minimal.screens.animedetail
+package com.yonasoft.minimal.screens.manga_detail
 
 import android.content.Context
 import android.net.Uri
@@ -27,29 +27,28 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.yonasoft.minimal.components.CircularProgress
 import com.yonasoft.minimal.components.SimpleAppBar
-import com.yonasoft.minimal.model.anime_detail_model.AnimeDetail
+import com.yonasoft.minimal.model.manga_detail_model.MangaDetail
 import com.yonasoft.minimal.navigation.Screen
 import com.yonasoft.minimal.ui.theme.Blue1
 import com.yonasoft.minimal.ui.theme.Blue2
 import java.util.*
-import kotlin.math.ceil
 
 
 @Composable
-fun AnimeDetailScreen(
+fun MangaDetailScreen(
     navController: NavHostController,
-    animeId: Int,
-    detailViewModel: AnimeDetailViewModel
+    mangaId: Int,
+    detailViewModel: MangaDetailViewModel
 ) {
 
     val loadingDetail = detailViewModel.loadingDetail
-    val animeDetail = detailViewModel.animeDetail
+    val mangaDetail = detailViewModel.mangaDetail
 
     Scaffold(modifier = Modifier.padding(),
         topBar = {
             SimpleAppBar(
                 text = if (!loadingDetail) {
-                    animeDetail!!.title
+                    mangaDetail!!.title
                 } else {
                     ""
                 }
@@ -58,7 +57,6 @@ fun AnimeDetailScreen(
             }
         }
     ) {
-
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,7 +70,7 @@ fun AnimeDetailScreen(
                 Detail(
                     navController = navController,
                     context = LocalContext.current,
-                    animeDetail = animeDetail!!
+                    mangaDetail = mangaDetail!!
                 )
             } else {
                 CircularProgress(
@@ -94,7 +92,7 @@ fun Detail(
     navController: NavController,
     modifier: Modifier = Modifier,
     context: Context,
-    animeDetail: AnimeDetail
+    mangaDetail: MangaDetail
 ) {
     Column(
         modifier = Modifier
@@ -111,12 +109,12 @@ fun Detail(
                 modifier = Modifier
                     .fillMaxWidth(.45f)
                     .fillMaxHeight(),
-                model = animeDetail.main_picture.large,
+                model = mangaDetail.main_picture.large,
                 contentDescription = "Anime Picture",
                 contentScale = ContentScale.FillWidth
             )
 
-            BasicStats(animeDetail)
+            BasicStats(mangaDetail)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -125,17 +123,26 @@ fun Detail(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            text = animeDetail.title,
+            text = mangaDetail.title,
             textAlign = TextAlign.Center,
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold
         )
 
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "by ${mangaDetail.authors.joinToString(separator = ", ") { it.node.last_name + " " +  it.node.first_name }}",
+            fontSize = 18.sp,
+            color = Color.White,
+            textAlign = TextAlign.Center,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             modifier = Modifier
                 .fillMaxWidth(),
-            text = "EN: ${animeDetail.alternative_titles.en}",
+            text = "EN: ${mangaDetail.alternative_titles.en}",
             textAlign = TextAlign.Center,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
@@ -144,20 +151,23 @@ fun Detail(
         Text(
             modifier = Modifier
                 .fillMaxWidth(),
-            text = "JP: ${animeDetail.alternative_titles.ja}",
+            text = "JP: ${mangaDetail.alternative_titles.ja}",
             textAlign = TextAlign.Center,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         )
+
+
 
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = animeDetail.genres!!.joinToString(separator = ", ") { it.name },
+            text = mangaDetail.genres.joinToString(separator = ", ") { it.name },
             textAlign = TextAlign.Center,
             color = Blue1,
             fontSize = 16.sp
         )
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -174,42 +184,25 @@ fun Detail(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            text = animeDetail.synopsis,
+            text = mangaDetail.synopsis,
             textAlign = TextAlign.Center,
             fontSize = 16.sp
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Studios: ${animeDetail.studios.joinToString(separator = ", ") { it.name }}",
-            fontSize = 20.sp, color = Color.White
-        )
 
-        Text(
-            text = "Source: ${animeDetail.source}",
-            fontSize = 20.sp, color = Color.White
-        )
-        Text(
-            text = "Rating: ${animeDetail.rating}",
-            fontSize = 20.sp, color = Color.White
-        )
-        if (animeDetail.broadcast!= null) {
-            Text(
-                text = "Broadcast: ${animeDetail.broadcast.day_of_the_week}, ${animeDetail.broadcast.start_time}",
-                fontSize = 20.sp, color = Color.White
-            )
-        }
+
 
         Spacer(modifier = Modifier.height(8.dp))
 
         SendElseWhere(text = "Recommendations",
             onClick = {
-                navController.navigate(Screen.RecommendationsScreen.withArgs(animeDetail.id.toString()))
+                navController.navigate(Screen.RecommendationsScreen.withArgs(mangaDetail.id.toString()))
             })
         Spacer(modifier = Modifier.height(12.dp))
         SendElseWhere(text = "Open in Browser",
             onClick = {
-                val uri = "https://myanimelist.net/anime/${animeDetail.id}/"
+                val uri = "https://myanimelist.net/manga/${mangaDetail.id}/"
                 CustomTabsIntent.Builder().build().launchUrl(context, Uri.parse(uri))
             })
     }
@@ -239,7 +232,7 @@ private fun SendElseWhere(text: String, onClick: () -> Unit) {
 
 
 @Composable
-private fun BasicStats(animeDetail: AnimeDetail) {
+private fun BasicStats(mangaDetail: MangaDetail) {
     Column(
         modifier = Modifier
             .fillMaxHeight(),
@@ -257,7 +250,7 @@ private fun BasicStats(animeDetail: AnimeDetail) {
                 tint = Color.White,
             )
             Text(
-                text = animeDetail.mean.toString(),
+                text = mangaDetail.mean.toString(),
                 color = Color.White,
                 fontSize = 32.sp,
                 textAlign = TextAlign.Center
@@ -277,26 +270,26 @@ private fun BasicStats(animeDetail: AnimeDetail) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Rank:\n#${animeDetail.rank}",
+                    text = "Rank:\n#${mangaDetail.rank}",
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
 
                 Text(
-                    text = "Popularity:\n#" + "%,d".format(animeDetail.popularity),
+                    text = "Popularity:\n#" + "%,d".format(mangaDetail.popularity),
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Members:\n" + "%,d".format(animeDetail.num_list_users),
+                    text = "Members:\n" + "%,d".format(mangaDetail.num_list_users),
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Favorites:\n" + "%,d".format(animeDetail.num_scoring_users),
+                    text = "Favorites:\n" + "%,d".format(mangaDetail.num_scoring_users),
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
@@ -310,7 +303,7 @@ private fun BasicStats(animeDetail: AnimeDetail) {
             ) {
                 Text(
                     text = "Type:\n${
-                        animeDetail.media_type.replaceFirstChar {
+                        mangaDetail.media_type.replaceFirstChar {
                             if (it.isLowerCase()) it.titlecase(
                                 Locale.getDefault()
                             ) else it.toString()
@@ -321,24 +314,19 @@ private fun BasicStats(animeDetail: AnimeDetail) {
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Season:\n${animeDetail.start_season.year}",
+                    text = "Created: \n${mangaDetail.created_at}",
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
 
                 Text(
-                    text = "Episodes:\n${animeDetail.num_episodes}",
+                    text = "Chapters:\n${mangaDetail.num_chapters}",
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
-                Text(
-                    text = "Duration:\n${ceil((animeDetail.average_episode_duration / 60).toDouble()).toInt()} min",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center
-                )
+
             }
         }
     }

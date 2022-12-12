@@ -2,6 +2,7 @@ package com.yonasoft.minimal.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yonasoft.minimal.ui.theme.Blue1
@@ -276,7 +278,8 @@ fun SeasonalAppBar(
                                     modifier = Modifier.fillMaxWidth(),
                                     value = year.toString(),
                                     onValueChange = { year = it.toInt() },
-                                    maxLines = 1
+                                    maxLines = 1,
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                                 )
                             }
                         }

@@ -10,6 +10,7 @@ sealed class Screen(val route:String){
     object MainScreen:Screen("main")
     object SearchScreen:Screen("search")
     object AnimeDetailScreen:Screen("anime_detail")
+    object MangaDetailScreen:Screen("manga_detail")
     object RankingScreen:Screen("ranking")
     object SeasonalScreen:Screen("seasonal")
     object RecommendationsScreen:Screen("recommendations")
