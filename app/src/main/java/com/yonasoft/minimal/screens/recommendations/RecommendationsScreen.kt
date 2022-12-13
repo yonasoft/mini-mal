@@ -55,7 +55,7 @@ fun RecommendationScreens(
                 if (recommendations.isEmpty()) {
                     MessageScreen(message = "No Recommendations Currently")
                 } else {
-                    LazyColumn(modifier = Modifier.background(Blue2)) {
+                    LazyColumn(modifier = Modifier.background(Blue2).fillMaxSize()) {
                         when (recommendationsViewModel.recommendationType) {
                             0 -> items(recommendationsViewModel.animeRecommendations) { animeDetail ->
                                 AnimeItemColumn(animeDetail = animeDetail) {
