@@ -129,7 +129,6 @@ class SearchViewModel @Inject constructor(
                 Log.e("HVM", "HttpException")
                 return null
             }
-        Log.d("manga list","${response.body()}")
         return if (response.isSuccessful && response.body() != null) {
             response.body()
         } else {

@@ -61,7 +61,7 @@ fun AnimeItemColumn(
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                       text = animeDetail.title,
+                            text = animeDetail.title,
                             fontSize = 18.sp, color = Color.White,
                             textAlign = TextAlign.Center
                         )
@@ -82,7 +82,7 @@ fun AnimeItemColumn(
                                 Locale.getDefault()
                             ) else it.toString()
                         }}"
-                        , fontSize = 14.sp)
+                            , fontSize = 14.sp)
                     }
                 }
                 Column(
@@ -177,7 +177,7 @@ fun MangaItemColumn(
                 ) {
 
                     Text(
-                        text = mangaDetail.genres!!.joinToString(separator = ", ") { it.name },
+                        text = mangaDetail.genres.joinToString(separator = ", ") { it.name },
                         fontSize = 16.sp, color = Color.Gray
 
                     )
@@ -187,4 +187,3 @@ fun MangaItemColumn(
 
     }
 }
-

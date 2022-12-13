@@ -191,13 +191,11 @@ fun Detail(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-
-
         Spacer(modifier = Modifier.height(8.dp))
 
         SendElseWhere(text = "Recommendations",
             onClick = {
-                navController.navigate(Screen.RecommendationsScreen.withArgs(mangaDetail.id.toString()))
+                navController.navigate(Screen.RecommendationsScreen.withArgs(mangaDetail.id.toString(), "1"))
             })
         Spacer(modifier = Modifier.height(12.dp))
         SendElseWhere(text = "Open in Browser",
@@ -223,7 +221,7 @@ private fun SendElseWhere(text: String, onClick: () -> Unit) {
         IconButton(onClick = { onClick() }) {
             Icon(
                 imageVector = Icons.Default.ArrowForward,
-                contentDescription = "Go to Recommendations"
+                contentDescription = "Go to location"
             )
         }
     }
@@ -282,12 +280,18 @@ private fun BasicStats(mangaDetail: MangaDetail) {
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
+
+
+
                 Text(
                     text = "Members:\n" + "%,d".format(mangaDetail.num_list_users),
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
+
+
+
                 Text(
                     text = "Favorites:\n" + "%,d".format(mangaDetail.num_scoring_users),
                     color = Color.White,
@@ -313,12 +317,8 @@ private fun BasicStats(mangaDetail: MangaDetail) {
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
-                Text(
-                    text = "Created: \n${mangaDetail.created_at}",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center
-                )
+
+
 
                 Text(
                     text = "Chapters:\n${mangaDetail.num_chapters}",
@@ -327,6 +327,19 @@ private fun BasicStats(mangaDetail: MangaDetail) {
                     textAlign = TextAlign.Center
                 )
 
+                Text(
+                    text = "Volumes: \n${mangaDetail.num_volumes}",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center
+                )
+
+                Text(
+                    text = "Started: \n${mangaDetail.created_at}",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }

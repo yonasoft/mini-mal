@@ -204,7 +204,7 @@ fun Detail(
 
         SendElseWhere(text = "Recommendations",
             onClick = {
-                navController.navigate(Screen.RecommendationsScreen.withArgs(animeDetail.id.toString()))
+                navController.navigate(Screen.RecommendationsScreen.withArgs(animeDetail.id.toString(),"0"))
             })
         Spacer(modifier = Modifier.height(12.dp))
         SendElseWhere(text = "Open in Browser",

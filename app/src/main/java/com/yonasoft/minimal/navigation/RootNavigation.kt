@@ -66,9 +66,11 @@ fun RootNavigation(
         composable(route = Screen.MangaDetailScreen.route + "/{manga_id}",
             arguments = listOf(navArgument("manga_id") {
                 type = NavType.IntType
-            }
+            },
+                navArgument("manga_id") {
+                    type = NavType.IntType
+                }
             )
-
         ) { entry ->
             entry.arguments?.getInt("manga_id")?.let {
                 MangaDetailScreen(
@@ -79,20 +81,21 @@ fun RootNavigation(
             }
         }
 
-        //Anime id needed to access details and its recommended animes
-        composable(route = Screen.RecommendationsScreen.route + "/{anime_id2}",
-            arguments = listOf(navArgument("anime_id2") {
+        composable(route = Screen.RecommendationsScreen.route + "/{rec_id}/{rec_type}",
+            arguments = listOf(navArgument("rec_id") {
                 type = NavType.IntType
-            }
+            },
+                navArgument("rec_type") {
+                    type = NavType.IntType
+                }
             )
         ) { entry ->
-            entry.arguments?.getInt("anime_id2")?.let {
-                RecommendationScreens(
-                    navController = rootNavController,
-                    animeId = it,
-                    recommendationsViewModel = hiltViewModel()
-                )
-            }
+            RecommendationScreens(
+                navController = rootNavController,
+                recommendationId = entry.arguments!!.getInt("rec_id"),
+                recommendationType = entry.arguments!!.getInt("rec_type"),
+                recommendationsViewModel = hiltViewModel()
+            )
         }
 
         composable(
