@@ -27,5 +27,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AuthenticationActivity"
+            android:launchMode="singleTop"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category
+                    android:name="android.intent.category.DEFAULT"/>
+                <category
+                    android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="callback"
+                    android:scheme="auth"/>
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

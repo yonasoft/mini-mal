@@ -9,7 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.yonasoft.minimal.screens.animedetail.AnimeDetailScreen
 import com.yonasoft.minimal.screens.home.HomeViewModel
-import com.yonasoft.minimal.screens.logins.LoginRequestScreen
 import com.yonasoft.minimal.screens.main.MainScreen
 import com.yonasoft.minimal.screens.manga_detail.MangaDetailScreen
 import com.yonasoft.minimal.screens.rankings.RankingScreen
@@ -43,9 +42,6 @@ fun RootNavigation(
             )
         }
 
-        composable(route = Screen.LoginRequestScreen.route) {
-            LoginRequestScreen(navController = rootNavController)
-        }
         //Anime id needed to access details
         composable(route = Screen.AnimeDetailScreen.route + "/{anime_id}",
             arguments = listOf(navArgument("anime_id") {

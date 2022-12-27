@@ -51,7 +51,7 @@ object MenuItems {
             contentDescription = "Account Section"
         ),
         MenuDestination(
-            route = Screen.LoginRequestScreen.route,
+            route = "",
             title = "Login",
             icon = Icons.Default.Login,
             contentDescription = "Navigate to Login",

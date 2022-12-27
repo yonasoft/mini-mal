@@ -3,7 +3,6 @@ package com.yonasoft.minimal.navigation
 //Available screens for this app
 sealed class Screen(val route:String){
     object SplashScreen: Screen("splash")
-    object LoginRequestScreen:Screen("login_request")
     object AnimeListScreen:Screen("anime_list")
     object MangaListScreen:Screen("manga_list")
     object HomeScreen:Screen("home")
