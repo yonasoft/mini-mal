@@ -14,8 +14,8 @@ import com.yonasoft.minimal.ui.theme.MiniMALTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AuthenticationActivity:ComponentActivity() {
-    private val viewModel:AuthenticationViewModel by viewModels()
+class LoginActivity:ComponentActivity() {
+    private val viewModel:LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +34,13 @@ class AuthenticationActivity:ComponentActivity() {
         Log.d("auth", "uriState is $uriState, vm state is ${viewModel.state} ")
         if (code != null && uriState == viewModel.state) {
             viewModel.handleAuthorizationCode(code)
-            viewModel.getMyList(viewModel.token.accessToken!!)
         }
+        finish()
     }
 }
 
 @Composable
-fun AuthScreen(authenticationViewModel: AuthenticationViewModel) {
+fun AuthScreen(authenticationViewModel: LoginViewModel) {
 
     val authorizationUrl = authenticationViewModel.authUrl
     val builder = CustomTabsIntent.Builder()

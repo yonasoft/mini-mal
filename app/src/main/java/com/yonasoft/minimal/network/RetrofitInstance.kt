@@ -16,7 +16,7 @@ object RetrofitInstance {
 
     val api2: MALApi2 =
         Retrofit.Builder()
-            .baseUrl("https://myanimelist.net/v1/oauth2/")
+            .baseUrl("https://myanimelist.net/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(MALApi2::class.java)

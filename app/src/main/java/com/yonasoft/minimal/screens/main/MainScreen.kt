@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.yonasoft.minimal.AuthenticationActivity
+import com.yonasoft.minimal.LoginActivity
 import com.yonasoft.minimal.components.*
 import com.yonasoft.minimal.navigation.BottomNavigation
 import com.yonasoft.minimal.navigation.Screen
@@ -61,7 +61,7 @@ fun MainScreen(
                     if (it.title != "Login") {
                         rootNavController.navigate(it.route)
                     } else {
-                        context.startActivity(Intent(context, AuthenticationActivity::class.java))
+                        context.startActivity(Intent(context, LoginActivity::class.java))
                     }
                 })
             //TODO: Change to if state for logged in vs logged out

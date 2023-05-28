@@ -63,6 +63,7 @@ dependencies {
 
     def nav_version = "2.5.3"
     def lifecycle_version = "2.5.1"
+
     //Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 

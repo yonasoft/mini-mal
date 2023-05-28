@@ -13,13 +13,7 @@ import javax.inject.Singleton
 class AppModule {
     @Provides
     @Singleton
-    fun provideAuth():MALAuth{
-        return MALAuth()
-    }
-
-    @Provides
-    @Singleton
     fun provideRepository():Repository{
-        return Repository(MALAuth())
+        return Repository()
     }
 }

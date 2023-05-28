@@ -1,25 +1,21 @@
 package com.yonasoft.minimal.network
 
 import com.yonasoft.minimal.model.token.AccessToken
+import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface MALApi2 {
 
-    @POST("token")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @POST("token/v1/oauth2")
+    @FormUrlEncoded
     suspend fun getAccessToken(
-        @Query("client_id") clientId: String,
-        @Query("code") code: String,
-        @Query("grant_type") grantType: String,
-        @Query("code_verifier") codeVerifier: String,
+        @Field("client_id") clientId:String,
+        @Field("code") code: String,
+        @Field("grant_type") grantType: String,
+        @Field("code_verifier") codeVerifier: String,
     ): Response<AccessToken>
 
-    @POST("token")
-    suspend fun getAccessToken(
-        @Query("client_id") clientId: String,
-        @Query("refresh_token") refreshToken:String,
-        @Query("code_verifier") codeVerifier: String,
-    ): Response<AccessToken>
 
 }

@@ -80,6 +80,4 @@ interface MALApi {
         @Query("offset") offset:Int
     ):Response<Anime>
 
-
-
 }
