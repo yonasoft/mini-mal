@@ -99,7 +99,7 @@ fun ImageWithBasicStats(animeDetail: AnimeDetail) {
     Row(modifier = Modifier.fillMaxSize()) {
         AsyncImage(
             modifier = Modifier
-                .weight(0.45f)
+                .fillMaxWidth(.45f)
                 .fillMaxHeight(),
             model = animeDetail.main_picture.large,
             contentDescription = "Anime Picture",
