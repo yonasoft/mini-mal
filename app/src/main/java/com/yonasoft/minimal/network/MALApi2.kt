@@ -1,9 +1,11 @@
 package com.yonasoft.minimal.network
 
 import com.yonasoft.minimal.model.token.AccessToken
-import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.Headers
+import retrofit2.http.POST
 
 interface MALApi2 {
 

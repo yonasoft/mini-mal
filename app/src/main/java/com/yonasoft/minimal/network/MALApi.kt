@@ -4,9 +4,11 @@ import com.yonasoft.minimal.model.anime_detail_model.AnimeDetail
 import com.yonasoft.minimal.model.anime_model.Anime
 import com.yonasoft.minimal.model.manga_detail_model.MangaDetail
 import com.yonasoft.minimal.model.manga_model.Manga
-import com.yonasoft.minimal.repository.Repository
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 //Api to access MAL's data
 interface MALApi {

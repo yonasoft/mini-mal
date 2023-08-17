@@ -15,45 +15,33 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-
 @HiltViewModel
 class AnimeDetailViewModel @Inject constructor(
     private val repository: Repository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private var animeId: Int = savedStateHandle["anime_id"]!!
+    private val animeId: Int = savedStateHandle["anime_id"] ?: 0
     var loadingDetail by mutableStateOf(true)
     var animeDetail: AnimeDetail? = null
 
     init {
-        getAnimeDetail(animeId = animeId)
-
+        fetchAnimeDetail()
     }
 
-    private fun getAnimeDetail(animeId: Int) {
+    private fun fetchAnimeDetail() {
         viewModelScope.launch {
-            getAnimeDetailPrivate(animeId = animeId)
-        }
-    }
-
-    private suspend fun getAnimeDetailPrivate(animeId: Int) {
-        val response =
             try {
-                repository.getAnimeDetails(animeId = animeId)
+                val response = repository.getAnimeDetails(animeId = animeId)
+                if (response.isSuccessful) {
+                    animeDetail = response.body()
+                    loadingDetail = false
+                }
             } catch (e: IOException) {
-                Log.e("HVM", "IOException")
-                return
+                Log.e("AnimeDetailViewModel", "IOException", e)
             } catch (e: HttpException) {
-                Log.e("HVM", "HttpException")
-                return
+                Log.e("AnimeDetailViewModel", "HttpException", e)
             }
-        if (response.isSuccessful && response.body() != null) {
-            animeDetail = response.body()!!
-            loadingDetail = false
-        } else {
-            return
         }
     }
 }
-

@@ -88,8 +88,3 @@ fun AnimeItemRow(
         }
     }
 }
-
-@Composable
-fun PersonalAnimeItemRow(){
-
-}

@@ -1,6 +1,5 @@
 package com.yonasoft.minimal.screens.animedetail
 
-import android.content.Context
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.background
@@ -20,6 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -48,11 +48,7 @@ fun AnimeDetailScreen(
     Scaffold(modifier = Modifier.padding(),
         topBar = {
             SimpleAppBar(
-                text = if (!loadingDetail) {
-                    animeDetail!!.title
-                } else {
-                    ""
-                }
+                text = animeDetail?.title ?: "",
             ) {
                 navController.popBackStack()
             }
@@ -68,11 +64,10 @@ fun AnimeDetailScreen(
                     rememberScrollState()
                 )
         ) {
-            if (!loadingDetail) {
-                Detail(
+            if (!loadingDetail && animeDetail != null) {
+                DetailContent(
                     navController = navController,
-                    context = LocalContext.current,
-                    animeDetail = animeDetail!!
+                    animeDetail = animeDetail
                 )
             } else {
                 CircularProgress(
@@ -84,135 +79,115 @@ fun AnimeDetailScreen(
                 )
             }
         }
-
     }
 }
 
 
 @Composable
-fun Detail(
-    navController: NavController,
-    modifier: Modifier = Modifier,
-    context: Context,
-    animeDetail: AnimeDetail
-) {
+fun DetailContent(navController: NavController, animeDetail: AnimeDetail) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Blue2)
-
+        modifier = Modifier.fillMaxSize().background(Blue2)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-        ) {
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth(.45f)
-                    .fillMaxHeight(),
-                model = animeDetail.main_picture.large,
-                contentDescription = "Anime Picture",
-                contentScale = ContentScale.FillWidth
-            )
-
-            BasicStats(animeDetail)
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            text = animeDetail.title,
-            textAlign = TextAlign.Center,
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-
-        Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = "EN: ${animeDetail.alternative_titles.en}",
-            textAlign = TextAlign.Center,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = "JP: ${animeDetail.alternative_titles.ja}",
-            textAlign = TextAlign.Center,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = animeDetail.genres!!.joinToString(separator = ", ") { it.name },
-            textAlign = TextAlign.Center,
-            color = Blue1,
-            fontSize = 16.sp
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            text = "Synopsis",
-            textAlign = TextAlign.Start,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            text = animeDetail.synopsis,
-            textAlign = TextAlign.Center,
-            fontSize = 16.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Studios: ${animeDetail.studios.joinToString(separator = ", ") { it.name }}",
-            fontSize = 20.sp, color = Color.White
-        )
-
-        Text(
-            text = "Source: ${animeDetail.source}",
-            fontSize = 20.sp, color = Color.White
-        )
-        Text(
-            text = "Rating: ${animeDetail.rating}",
-            fontSize = 20.sp, color = Color.White
-        )
-        if (animeDetail.broadcast!= null) {
-            Text(
-                text = "Broadcast: ${animeDetail.broadcast.day_of_the_week}, ${animeDetail.broadcast.start_time}",
-                fontSize = 20.sp, color = Color.White
-            )
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        SendElseWhere(text = "Recommendations",
-            onClick = {
-                navController.navigate(Screen.RecommendationsScreen.withArgs(animeDetail.id.toString(),"0"))
-            })
-        Spacer(modifier = Modifier.height(12.dp))
-        SendElseWhere(text = "Open in Browser",
-            onClick = {
-                val uri = "https://myanimelist.net/anime/${animeDetail.id}/"
-                CustomTabsIntent.Builder().build().launchUrl(context, Uri.parse(uri))
-            })
+        ImageWithBasicStats(animeDetail)
+        DetailInfo(animeDetail)
+        ExternalLinks(navController, animeDetail)
     }
+}
+
+@Composable
+fun ImageWithBasicStats(animeDetail: AnimeDetail) {
+    Row(modifier = Modifier.fillMaxSize()) {
+        AsyncImage(
+            modifier = Modifier
+                .weight(0.45f)
+                .fillMaxHeight(),
+            model = animeDetail.main_picture.large,
+            contentDescription = "Anime Picture",
+            contentScale = ContentScale.FillWidth
+        )
+        BasicStats(animeDetail)
+    }
+}
+
+@Composable
+fun DetailInfo(animeDetail: AnimeDetail) {
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        TitleText(text = animeDetail.title, fontSize = 28.sp)
+        TitleText(text = "EN: ${animeDetail.alternative_titles.en}")
+        TitleText(text = "JP: ${animeDetail.alternative_titles.ja}")
+        GenresText(animeDetail)
+        TitleText(text = "Synopsis", fontSize = 20.sp)
+        NormalText(text = animeDetail.synopsis)
+        StudiosText(animeDetail)
+        NormalText(text = "Source: ${animeDetail.source}")
+        NormalText(text = "Rating: ${animeDetail.rating}")
+        BroadcastText(animeDetail)
+    }
+}
+
+@Composable
+fun ExternalLinks(navController: NavController, animeDetail: AnimeDetail) {
+    val context = LocalContext.current
+
+    SendElseWhere(
+        text = "Recommendations",
+        onClick = {
+            navController.navigate(Screen.RecommendationsScreen.withArgs(animeDetail.id.toString(), "0"))
+        }
+    )
+
+    SendElseWhere(
+        text = "Open in Browser",
+        onClick = {
+            val uri = "https://myanimelist.net/anime/${animeDetail.id}/"
+            CustomTabsIntent.Builder().build().launchUrl(context, Uri.parse(uri))
+        }
+    )
+}
+
+@Composable
+fun StudiosText(animeDetail: AnimeDetail) {
+    NormalText(text = "Studios: ${animeDetail.studios.joinToString(separator = ", ") { it.name }}")
+}
+
+@Composable
+fun BroadcastText(animeDetail: AnimeDetail) {
+    if (animeDetail.broadcast!=null) {
+        NormalText(text = "Broadcast: ${animeDetail.broadcast.day_of_the_week}, ${animeDetail.broadcast.start_time}")
+    }
+}
+
+@Composable
+fun GenresText(animeDetail: AnimeDetail) {
+    Text(
+        text = animeDetail.genres!!.joinToString(separator = ", ") { it.name },
+        textAlign = TextAlign.Center,
+        color = Blue1,
+        fontSize = 16.sp
+    )
+}
+
+@Composable
+fun NormalText(text: String) {
+    Text(
+        text = text,
+        textAlign = TextAlign.Center,
+        fontSize = 16.sp
+    )
+}
+
+
+@Composable
+fun TitleText(text: String, fontSize: TextUnit = 16.sp) {
+    Text(
+        text = text,
+        fontSize = fontSize,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center
+    )
 }
 
 @Composable
