@@ -1,5 +1,5 @@
 # miniMAL
-![image](https://i.ibb.co/bK4m3WT/Web-1920-1.png)]
+![image](https://ibb.co/nLXm0g9)]
 ## What is miniMAL?
 It is a personal project I created for educational purposes. It is an Android application allowing users to access information on over 60,000 Anime and Manga titles.
 ## Technologies
