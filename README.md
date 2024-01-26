@@ -1,7 +1,7 @@
 # miniMAL
 <a href="https://ibb.co/nLXm0g9"><img src="https://i.ibb.co/nLXm0g9/Web-1920-1.png" alt="Web-1920-1" border="0" /></a>
 ## What is miniMAL?
-It is a personal project I created for educational purposes. It is an Android application that allows users to access information on over 60,000 Anime and Manga titles.
+It is an Android application that allows users to access information on over 70,000 Anime and Manga titles.
 ## Technologies
 - **Kotlin**
 - Coded UI with **Jetpack Compose**
