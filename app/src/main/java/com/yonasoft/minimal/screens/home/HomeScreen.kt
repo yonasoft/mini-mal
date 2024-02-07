@@ -23,9 +23,9 @@ import com.yonasoft.minimal.ui.theme.Blue2
 
 @Composable
 fun HomeScreen(
-    botNavController: NavController,
     rootNavController: NavController,
     homeViewModel: HomeViewModel,
+    paddingValues: PaddingValues = PaddingValues(0.dp),
     //DO NOT remove the string parameter and the default value below. For an unknown reason, removing it will result in crash when running application,
     filler:String = ""
 ) {

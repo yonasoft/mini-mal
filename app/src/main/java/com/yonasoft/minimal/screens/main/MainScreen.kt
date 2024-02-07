@@ -1,20 +1,20 @@
 package com.yonasoft.minimal.screens.main
 
 import android.content.Intent
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.yonasoft.minimal.LoginActivity
-import com.yonasoft.minimal.components.*
-import com.yonasoft.minimal.navigation.BottomNavigation
+import com.yonasoft.minimal.components.DrawerHeader
+import com.yonasoft.minimal.components.HomeAppBar
+import com.yonasoft.minimal.components.LoggedOutDrawerBody
+import com.yonasoft.minimal.components.MenuItems
 import com.yonasoft.minimal.navigation.Screen
+import com.yonasoft.minimal.screens.home.HomeScreen
 import com.yonasoft.minimal.screens.home.HomeViewModel
 import com.yonasoft.minimal.screens.search.SearchViewModel
 import kotlinx.coroutines.launch
@@ -33,7 +33,6 @@ fun MainScreen(
 
     Scaffold(scaffoldState = scaffoldState,
         topBar = {
-
             HomeAppBar(
                 text = searchViewModel.searchQuery,
                 onSearch = {
@@ -52,6 +51,7 @@ fun MainScreen(
                 onTextChange = { searchViewModel.searchQuery = it }
             )
         },
+        content = {HomeScreen(rootNavController = rootNavController, homeViewModel = homeViewModel, paddingValues = it)},
         drawerContent = {
             DrawerHeader()
             LoggedOutDrawerBody(
@@ -64,17 +64,6 @@ fun MainScreen(
                         context.startActivity(Intent(context, LoginActivity::class.java))
                     }
                 })
-            //TODO: Change to if state for logged in vs logged out
-        },
-        bottomBar = { BottomBar(navController = bottomNavController) }) {
 
-        Surface(modifier = Modifier.padding(it)) {
-            BottomNavigation(
-                rootNavHostController = rootNavController,
-                botNavController = bottomNavController,
-                homeViewModel = homeViewModel
-            )
-        }
-
-    }
+        })
 }

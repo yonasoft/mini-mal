@@ -46,17 +46,6 @@ object MenuItems {
             icon = Icons.Default.DateRange,
             contentDescription = "Navigate to Seasonal Anime",
         ),
-        MenuSection(
-            title = "Account",
-            contentDescription = "Account Section"
-        ),
-        MenuDestination(
-            route = "",
-            title = "Login",
-            icon = Icons.Default.Login,
-            contentDescription = "Navigate to Login",
-        ),
-
         )
 }
 

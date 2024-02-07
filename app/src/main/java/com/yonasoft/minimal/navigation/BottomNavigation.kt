@@ -21,15 +21,7 @@ fun BottomNavigation(
     NavHost(navController = botNavController, startDestination = Screen.HomeScreen.route) {
 
         composable(route = Screen.HomeScreen.route) {
-            HomeScreen(rootNavController = rootNavHostController, botNavController = botNavController, homeViewModel = homeViewModel)
+            HomeScreen(rootNavController = rootNavHostController, homeViewModel = homeViewModel)
         }
-        composable(route = Screen.AnimeListScreen.route) {
-            AnimeListScreen(rootNavController = rootNavHostController, botNavController = botNavController)
-        }
-        composable(route = Screen.MangaListScreen.route) {
-            MangaListScreen(rootNavController = rootNavHostController, botNavController = botNavController)
-        }
-
-
     }
 }
