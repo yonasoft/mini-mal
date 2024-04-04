@@ -42,7 +42,6 @@ class Repository {
             fields = fields
         )
     }
-
     suspend fun getAnimeSeasonal(
         year: Int,
         season: String,
@@ -61,7 +60,6 @@ class Repository {
             fields = ""
         )
     }
-
     suspend fun getAnimeSuggested(
         limit: Int,
         offset: Int,
@@ -78,7 +76,7 @@ class Repository {
     suspend fun getAnimeDetails(
         clientId: String = MALAuth.clientId,
         animeId: Int,
-    ):Response<AnimeDetail> {
+    ): Response<AnimeDetail> {
         return RetrofitInstance.api.getAnimeDetails(
             clientId = clientId,
             animeId = animeId,
@@ -104,7 +102,7 @@ class Repository {
     suspend fun getMangaDetails(
         clientId: String = MALAuth.clientId,
         mangaId: Int,
-    ):Response<MangaDetail> {
+    ): Response<MangaDetail> {
         return RetrofitInstance.api.getMangaDetails(
             clientId = clientId,
             mangaId = mangaId,
@@ -115,12 +113,12 @@ class Repository {
     suspend fun retrieveAccessToken(
         clientId: String,
         code: String,
-        codeVerifier:String,
-        grantType:String = MALAuth.grantType,
+        codeVerifier: String,
+        grantType: String = MALAuth.grantType,
     ): Response<AccessToken> {
-        Log.d("rep","retrieve token is running")
-        Log.d("rep","code is $code")
-        Log.d("rep","verify is $codeVerifier")
+        Log.d("rep", "retrieve token is running")
+        Log.d("rep", "code is $code")
+        Log.d("rep", "verify is $codeVerifier")
         return RetrofitInstance.api2.getAccessToken(
             clientId = clientId,
             grantType = grantType,
@@ -130,12 +128,12 @@ class Repository {
     }
 
     suspend fun getMyAnimeList(
-        token:String,
-        status:String,
-        sort:String,
-        limit:Int,
-        offset:Int
-    ):Response<Anime>{
+        token: String,
+        status: String,
+        sort: String,
+        limit: Int,
+        offset: Int
+    ): Response<Anime> {
         return RetrofitInstance.api.getMyAnimeList(
             token = "Bearer $token",
             status = status,

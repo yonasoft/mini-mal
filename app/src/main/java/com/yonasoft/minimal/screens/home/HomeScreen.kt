@@ -105,7 +105,7 @@ fun HomeScreen(
                     }
                 }
             }
-            //TODO: Add currently watching row and recommended/suggested row if they logged in
+
         }
     }
 }
