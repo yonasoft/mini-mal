@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -208,14 +209,14 @@ fun SeasonalAppBar(
     initialYear: Int,
     onOk: (String, Int) -> Unit
 ) {
-    var expanded by remember {
+    var expanded by rememberSaveable {
         mutableStateOf(false)
     }
 
-    var season by remember {
+    var season by rememberSaveable {
         mutableStateOf(initialSeason)
     }
-    var year by remember {
+    var year by rememberSaveable {
         mutableStateOf(initialYear)
     }
 

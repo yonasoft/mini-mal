@@ -3,12 +3,15 @@ package com.yonasoft.minimal.screens.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,15 +23,17 @@ import com.yonasoft.minimal.components.MiniButton
 import com.yonasoft.minimal.navigation.Screen
 import com.yonasoft.minimal.ui.theme.Blue1
 import com.yonasoft.minimal.ui.theme.Blue2
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
     rootNavController: NavController,
     homeViewModel: HomeViewModel,
     paddingValues: PaddingValues = PaddingValues(0.dp),
-    //DO NOT remove the string parameter and the default value below. For an unknown reason, removing it will result in crash when running application,
-    filler:String = ""
+    filler: String = ""
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Surface {
         Column(
             modifier = Modifier
@@ -46,7 +51,7 @@ fun HomeScreen(
                     text = "Popular Airing",
                     color = Color.White
                 )
-                MiniButton(onClick = { rootNavController.navigate(Screen.RankingScreen.route)}, text = "more")
+                MiniButton(onClick = { rootNavController.navigate(Screen.RankingScreen.route) }, text = "more")
             }
             Spacer(modifier = Modifier.height(8.dp))
             if (homeViewModel.airRankingLoading) {
@@ -60,11 +65,32 @@ fun HomeScreen(
                     strokeWidth = 12.dp
                 )
             } else {
-                LazyRow {
-                    items(homeViewModel.airingRanking) { anime ->
+                LazyRow(state = rememberLazyListState()) {
+                    itemsIndexed(homeViewModel.airingRanking) { index, anime ->
+                        if (index >= homeViewModel.airingRanking.size - 1 && !homeViewModel.airRankingLoading) {
+                            LaunchedEffect(Unit) {
+                                coroutineScope.launch {
+                                    homeViewModel.loadAiringRanking()
+                                }
+                            }
+                        }
                         AnimeItemRow(animeDetail = anime) {
                             rootNavController.navigate(
                                 Screen.AnimeDetailScreen.withArgs(anime.id.toString())
+                            )
+                        }
+                    }
+                    if (homeViewModel.airRankingLoading) {
+                        item {
+                            CircularProgress(
+                                boxModifier = Modifier
+                                    .width(64.dp)
+                                    .height(64.dp)
+                                    .padding(16.dp),
+                                alignment = Alignment.Center,
+                                indicatorModifier = Modifier.size(32.dp),
+                                color = Blue1,
+                                strokeWidth = 8.dp
                             )
                         }
                     }
@@ -79,7 +105,7 @@ fun HomeScreen(
                     text = "Seasonal",
                     color = Color.White
                 )
-                MiniButton(onClick = {rootNavController.navigate(Screen.SeasonalScreen.route)}, text = "more")
+                MiniButton(onClick = { rootNavController.navigate(Screen.SeasonalScreen.route) }, text = "more")
             }
             Spacer(modifier = Modifier.height(8.dp))
             if (homeViewModel.seasonalLoading) {
@@ -93,24 +119,37 @@ fun HomeScreen(
                     strokeWidth = 12.dp
                 )
             } else {
-                LazyRow {
-                    items(homeViewModel.seasonal) { anime ->
-                        AnimeItemRow(
-                            animeDetail = anime,
-                        ) {
+                LazyRow(state = rememberLazyListState()) {
+                    itemsIndexed(homeViewModel.seasonal) { index, anime ->
+                        if (index >= homeViewModel.seasonal.size - 2 && !homeViewModel.seasonalLoading) {
+                            LaunchedEffect(Unit) {
+                                coroutineScope.launch {
+                                    homeViewModel.loadSeasonal()
+                                }
+                            }
+                        }
+                        AnimeItemRow(animeDetail = anime) {
                             rootNavController.navigate(
                                 Screen.AnimeDetailScreen.withArgs(anime.id.toString())
                             )
                         }
                     }
+                    if (homeViewModel.seasonalLoading) {
+                        item {
+                            CircularProgress(
+                                boxModifier = Modifier
+                                    .width(64.dp)
+                                    .height(64.dp)
+                                    .padding(16.dp),
+                                alignment = Alignment.Center,
+                                indicatorModifier = Modifier.size(32.dp),
+                                color = Blue1,
+                                strokeWidth = 8.dp
+                            )
+                        }
+                    }
                 }
             }
-
         }
     }
 }
-
-
-
-
-

@@ -8,9 +8,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScrollableTabRow
+import androidx.compose.material.Surface
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,13 +43,17 @@ fun SearchScreen(
     navController: NavController,
     searchViewModel: SearchViewModel
 ) {
-
     val scope = rememberCoroutineScope()
+    val query = searchViewModel.searchQuery
+    val previousQuery = searchViewModel.previousSearch
+
     Scaffold(topBar = {
-        SearchAppBar(text = searchViewModel.searchQuery,
+        SearchAppBar(text = query,
             onSearch = {
-                searchViewModel.getAnimeList(searchViewModel.searchQuery)
-                searchViewModel.getMangaList(searchViewModel.searchQuery)
+                if (previousQuery != query) {
+                    searchViewModel.onNewSearch()
+                }
+                searchViewModel.performSearch()
             },
             onCancel = { searchViewModel.searchQuery = "" },
             onTextChange = { searchViewModel.searchQuery = it }
@@ -94,6 +106,7 @@ fun SearchScreen(
                         0 -> AnimeTab(
                             searchViewModel = searchViewModel, navController = navController
                         )
+
                         1 -> MangaTab(
                             searchViewModel = searchViewModel,
                             navController = navController
@@ -110,7 +123,11 @@ private fun AnimeTab(
     searchViewModel: SearchViewModel,
     navController: NavController
 ) {
-    if (searchViewModel.animeLoading) {
+    val animeResult = searchViewModel.animeResult
+    val animeLoading = searchViewModel.animeLoading
+    val scope = rememberCoroutineScope()
+
+    if (animeLoading) {
         CircularProgress(
             boxModifier = Modifier.fillMaxSize(),
             alignment = Alignment.Center,
@@ -122,9 +139,17 @@ private fun AnimeTab(
         LazyColumn(
             modifier = Modifier
                 .background(Blue2)
-                .fillMaxSize()
+                .fillMaxSize(),
+            state = LazyListState()
         ) {
-            items(searchViewModel.animeResult) { anime ->
+            itemsIndexed(animeResult) { index, anime ->
+                if (index >= animeResult.size - 2 && !animeLoading) {
+                    LaunchedEffect(Unit) {
+                        scope.launch {
+                            searchViewModel.getAnimeList()
+                        }
+                    }
+                }
                 AnimeItemColumn(
                     animeDetail = anime
                 ) {
@@ -142,6 +167,11 @@ private fun MangaTab(
     searchViewModel: SearchViewModel,
     navController: NavController
 ) {
+
+    val scope = rememberCoroutineScope()
+    val mangaResult = searchViewModel.mangaResult
+    val mangaLoading = searchViewModel.mangaLoading
+
     if (searchViewModel.mangaLoading) {
         CircularProgress(
             boxModifier = Modifier.fillMaxSize(),
@@ -154,10 +184,18 @@ private fun MangaTab(
         LazyColumn(
             modifier = Modifier
                 .background(Blue2)
-                .fillMaxSize()
+                .fillMaxSize(),
+            rememberLazyListState()
         ) {
 
-            items(searchViewModel.mangaResult) { manga ->
+            itemsIndexed(mangaResult) { index, manga ->
+                if (index >= mangaResult.size - 2 && !mangaLoading) {
+                    LaunchedEffect(Unit) {
+                        scope.launch {
+                            searchViewModel.getMangaList()
+                        }
+                    }
+                }
                 MangaItemColumn(
                     mangaDetail = manga
                 ) {

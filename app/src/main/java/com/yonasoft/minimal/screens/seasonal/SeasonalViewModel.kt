@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SeasonalViewModel @Inject constructor(private val repository: Repository):ViewModel() {
 
-
     var loading by mutableStateOf(true)
     var season by mutableStateOf(when (Calendar.getInstance().get(Calendar.MONTH)) {
         0,1,2 -> "winter"
@@ -29,6 +28,7 @@ class SeasonalViewModel @Inject constructor(private val repository: Repository):
     })
     var year by mutableStateOf(Calendar.getInstance().get(Calendar.YEAR))
     var seasonalList by mutableStateOf(listOf<AnimeDetail>())
+    var offset by mutableStateOf(0)
 
     init {
         getSeasonal()
@@ -40,8 +40,14 @@ class SeasonalViewModel @Inject constructor(private val repository: Repository):
         }
     }
 
-    private suspend fun getSeasonal2(season:String = this.season, year: Int = this.year) {
-        loading = true
+    private suspend fun getSeasonal2(season:String, year: Int) {
+        if(season!=this.season || year!=this.year){
+            offset = 0
+            seasonalList = listOf()
+        }
+        if(offset == 0){
+            loading = true
+        }
 
         val response =
             try {
@@ -49,8 +55,8 @@ class SeasonalViewModel @Inject constructor(private val repository: Repository):
                     sort = "anime_score",
                     year = year,
                     season = season,
-                    limit = 50,
-                    offset = 0,
+                    limit = 7,
+                    offset = offset,
                     fields = ""
                 )
             } catch (e: IOException) {
@@ -66,9 +72,10 @@ class SeasonalViewModel @Inject constructor(private val repository: Repository):
             for(item in response.body()!!.data){
                 getAnimeDetail(item.node.id)?.let { result.add(it) }
             }
-            seasonalList = result
-            loading = false
+            seasonalList += result
+            offset += result.size
         }
+        loading = false
     }
 
     private suspend fun getAnimeDetail(animeId:Int): AnimeDetail? {

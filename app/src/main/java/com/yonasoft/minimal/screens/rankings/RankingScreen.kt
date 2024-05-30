@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,10 +23,10 @@ import androidx.navigation.NavController
 import com.yonasoft.minimal.components.AnimeItemColumn
 import com.yonasoft.minimal.components.CircularProgress
 import com.yonasoft.minimal.components.RankingAppBar
-import com.yonasoft.minimal.model.anime_detail_model.AnimeDetail
 import com.yonasoft.minimal.navigation.Screen
 import com.yonasoft.minimal.ui.theme.Blue1
 import com.yonasoft.minimal.ui.theme.Blue2
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -54,16 +57,27 @@ fun RankingScreen(
                     strokeWidth = 12.dp
                 )
             } else {
-                Rankings(rankingList = rankingList, navController = navController)
+                Rankings(rankingViewModel = rankingViewModel, navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun Rankings(rankingList: List<AnimeDetail>, navController: NavController) {
-    LazyColumn(modifier = Modifier.background(Blue2)) {
-        itemsIndexed(rankingList) { index, animeDetail ->
+fun Rankings(rankingViewModel: RankingViewModel, navController: NavController) {
+    val scope = rememberCoroutineScope()
+    val rankingList = rankingViewModel.rankingList
+    val loading = rankingViewModel.loading
+
+    LazyColumn(modifier = Modifier.background(Blue2), rememberLazyListState()) {
+        itemsIndexed(rankingViewModel.rankingList) { index, animeDetail ->
+            if (index >= rankingList.size - 2 && !loading) {
+                LaunchedEffect(Unit) {
+                    scope.launch {
+                        rankingViewModel.getRanking()
+                    }
+                }
+            }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "# ${index + 1}",

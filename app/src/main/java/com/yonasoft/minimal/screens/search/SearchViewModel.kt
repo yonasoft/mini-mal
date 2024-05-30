@@ -19,6 +19,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private var repository: Repository,
 ) : ViewModel() {
+    var previousSearch by mutableStateOf("")
     var searchQuery by mutableStateOf("")
 
     var animeResult by mutableStateOf(listOf<AnimeDetail>())
@@ -27,9 +28,12 @@ class SearchViewModel @Inject constructor(
     var animeLoading by mutableStateOf(false)
     var mangaLoading by mutableStateOf(false)
 
+    var animeOffset by mutableStateOf(0)
+    var mangaOffset by mutableStateOf(0)
+
 
     fun getAnimeList(query: String = searchQuery) {
-        if(query.isNotEmpty()) {
+        if (query.isNotEmpty()) {
             viewModelScope.launch {
                 getAnimeListPrivate(query = query)
             }
@@ -37,7 +41,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun getMangaList(query: String = searchQuery) {
-        if(query.isNotEmpty()) {
+        if (query.isNotEmpty()) {
             viewModelScope.launch {
                 getMangaListPrivate(query = query)
             }
@@ -45,13 +49,15 @@ class SearchViewModel @Inject constructor(
     }
 
     private suspend fun getAnimeListPrivate(query: String) {
-        animeLoading = true
+        if (animeOffset == 0) {
+            animeLoading = true
+        }
         val searchResponse =
             try {
                 repository.getAnimeList(
                     query = query,
-                    limit = 50,
-                    offset = 0,
+                    limit = 7,
+                    offset = animeOffset,
                     fields = ""
                 )
             } catch (e: IOException) {
@@ -66,9 +72,10 @@ class SearchViewModel @Inject constructor(
             for (item in searchResponse.body()!!.data) {
                 getAnimeDetail(item.node.id)?.let { result.add(it) }
             }
-            animeResult = result
-            animeLoading = false
+            animeResult += result
+            animeOffset += result.size
         }
+        animeLoading = false
     }
 
     private suspend fun getAnimeDetail(animeId: Int): AnimeDetail? {
@@ -91,13 +98,15 @@ class SearchViewModel @Inject constructor(
 
 
     private suspend fun getMangaListPrivate(query: String) {
-        mangaLoading = true
+        if (mangaResult.isEmpty()) {
+            mangaLoading = true
+        }
         val searchResponse =
             try {
                 repository.getMangaList(
                     query = query,
-                    limit = 50,
-                    offset = 0,
+                    limit = 7,
+                    offset = mangaOffset,
                     fields = ""
                 )
             } catch (e: IOException) {
@@ -108,14 +117,15 @@ class SearchViewModel @Inject constructor(
                 return
             }
         if (searchResponse.isSuccessful && searchResponse.body() != null) {
-            Log.d("manga list","${searchResponse.body()}")
+            Log.d("manga list", "${searchResponse.body()}")
             val result = mutableListOf<MangaDetail>()
             for (item in searchResponse.body()!!.data) {
                 getMangaDetail(item.node.id)?.let { result.add(it) }
             }
-            mangaResult = result
-            mangaLoading = false
+            mangaResult += result
+            mangaOffset += result.size
         }
+        mangaLoading = false
     }
 
     private suspend fun getMangaDetail(mangaId: Int): MangaDetail? {
@@ -133,6 +143,19 @@ class SearchViewModel @Inject constructor(
             response.body()
         } else {
             null
+        }
+    }
+    fun performSearch(){
+        getAnimeList(searchQuery)
+        getMangaList(searchQuery)
+        previousSearch = searchQuery
+    }
+    fun onNewSearch() {
+        viewModelScope.launch {
+            animeOffset = 0
+            mangaOffset = 0
+            animeResult = listOf()
+            mangaResult = listOf()
         }
     }
 }
