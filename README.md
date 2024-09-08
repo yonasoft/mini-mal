@@ -3,7 +3,7 @@
 ## What is miniMAL?
 An Android application providing access to information on over 80,000 Anime and Manga titles. Users can view details, rankings, or sort by season.
 <br><br/>
-[Download APK](https://www.dropbox.com/scl/fi/7rpkg0gfjuveywef97gvv/miniMAL.apk?rlkey=n4oq09cp1nol5eactqk1onr2y&st=bui85868&dl=0)
+[Download APK](https://www.dropbox.com/scl/fi/7rpkg0gfjuveywef97gvv/miniMAL.apk?rlkey=n4oq09cp1nol5eactqk1onr2y&st=bui85868&dl=1)
 ## Technologies
 - **Kotlin**
 - Coded UI with **Jetpack Compose**
