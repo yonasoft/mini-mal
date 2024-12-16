@@ -184,7 +184,7 @@ fun RankingAppBar(
                         Text(text = "Special")
                     }
                     DropdownMenuItem(onClick = {
-                        onSelect("By Popularity")
+                        onSelect("ByPopularity")
                         expanded = false
                     }) {
                         Text(text = "By Popularity")

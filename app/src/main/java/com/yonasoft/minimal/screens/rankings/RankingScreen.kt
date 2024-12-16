@@ -44,7 +44,8 @@ fun RankingScreen(
         topBar = {
             RankingAppBar(title = title,
                 onNavigateBack = { navController.popBackStack() },
-                onSelect = { rankingViewModel.getRanking(it) })
+                onSelect = {
+                    rankingViewModel.getRanking(it) })
         }
     ) {
         Surface(modifier = Modifier.padding(it)) {

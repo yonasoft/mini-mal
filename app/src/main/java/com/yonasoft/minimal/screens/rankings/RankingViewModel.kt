@@ -34,11 +34,13 @@ class RankingViewModel @Inject constructor(private val repository: Repository) :
         viewModelScope.launch {
             if(rankingType!=currentRankingType) {
                 offset.value = 0
+                rankingList = emptyList()
+                currentRankingType = rankingType
             }
             if (offset.value == 0){
                 loading = true
             }
-            val airingListResponse:Response<Anime> =
+            val rankingListResponse:Response<Anime> =
                 try {
                     repository.getAnimeRanking(
                         rankingType = rankingType.lowercase(Locale.getDefault()),
@@ -56,9 +58,9 @@ class RankingViewModel @Inject constructor(private val repository: Repository) :
                     return@launch
                 }
 
-            if (airingListResponse.isSuccessful && airingListResponse.body() != null) {
+            if (rankingListResponse.isSuccessful && rankingListResponse.body() != null) {
                 val result = mutableListOf<AnimeDetail>()
-                for (item in airingListResponse.body()!!.data) {
+                for (item in rankingListResponse.body()!!.data) {
                     getAnimeDetail(item.node.id)?.let { result.add(it) }
                 }
                 rankingList += result
