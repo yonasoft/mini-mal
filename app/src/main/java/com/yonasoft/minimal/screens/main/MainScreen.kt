@@ -1,14 +1,11 @@
 package com.yonasoft.minimal.screens.main
 
-import android.content.Intent
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.yonasoft.minimal.LoginActivity
 import com.yonasoft.minimal.components.DrawerHeader
 import com.yonasoft.minimal.components.HomeAppBar
 import com.yonasoft.minimal.components.LoggedOutDrawerBody
@@ -23,13 +20,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     rootNavController: NavHostController,
-    bottomNavController: NavHostController = rememberNavController(),
     homeViewModel: HomeViewModel,
     searchViewModel: SearchViewModel,
 ) {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    val context =  LocalContext.current
+    LocalContext.current
 
     Scaffold(scaffoldState = scaffoldState,
         topBar = {
@@ -58,11 +54,7 @@ fun MainScreen(
                 items = MenuItems.loggedOutItems,
                 navController = rootNavController,
                 onClick = {
-                    if (it.title != "Login") {
                         rootNavController.navigate(it.route)
-                    } else {
-                        context.startActivity(Intent(context, LoginActivity::class.java))
-                    }
                 })
 
         })
