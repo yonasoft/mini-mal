@@ -1,6 +1,6 @@
 # miniMAL - Look up Anime and Manga titles
 <a href="https://ibb.co/nLXm0g9"><img src="https://i.ibb.co/nLXm0g9/Web-1920-1.png" alt="Web-1920-1" border="0" /></a>
-### Improved version coming soon (ETR: June 2024)
+### Improved version coming soon (ETR: June 2025)
 ## What is miniMAL?
 An Android application providing access to information on over 80,000 Anime and Manga titles. Users can view details, rankings, or sort by season.
 <br><br/>
